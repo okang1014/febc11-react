@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import Ji from './ji.js';
+
+    // 애플리케이션의 시작점
+    function App() {
+      return (
+        // 한 눈에 html 마크업 구조를 확인할 수 있음
+        Ji.createElement('div', { id: 'app' },
+          Ji.createElement('header', null,
+            Ji.createElement('h1', null, 'Counter - createElement() 라이브러리 사용'),
+            Ji.createElement('p', null, '파일 경로: ',
+              Ji.createElement('span', { id: 'filepath' }, `ch${document.URL.split('/ch')[1]}`))),
+          Ji.createElement('div', { id: 'counter' },
+            Ji.createElement('button', { type: 'button', onclick: 'handleDown()' }, '-'),
+            Ji.createElement('button', { type: 'button', onclick: 'handleReset()' }, 0),
+            Ji.createElement('button', { type: 'button', onclick: 'handleUp()' }, '+'),
+            Ji.createElement('span', { style: 'margin-left: 10px' }, 0)))
+      );
+    }
+
+    // 변수에 대입해서 노드를 생성하는 대신, 위의 노드(UI)를 생성하는 함수로 생성
+    // const h1 = Ji.createElement('h1', null, 'Counter - createElement() 라이브러리 사용');
+    // const p = Ji.createElement('p', null, '파일 경로: ', Ji.createElement('span', { id: 'filepath' }));
+    // const downBtn = Ji.createElement('button', { type: 'button', onclick: 'handleDown()' }, '-');
+    // const resetBtn = Ji.createElement('button', { type: 'button', onclick: 'handleReset()' }, 0);
+    // const upBtn = Ji.createElement('button', { type: 'button', onclick: 'handleUp()' }, '+');
+    // const resultSpan = Ji.createElement('span', { style: 'margin-left: 10px' }, 0);
+    // const Header = Ji.createElement('header', null, h1, p);
+    // const Counter = Ji.createElement('div', { id: 'counter' }, downBtn, resetBtn, upBtn, resultSpan);
+
+
+    // document.getElementById('root').appendChild(App);
+    Ji.createRoot(document.getElementById('root')).render(App);
+  </script>
+
+  <script type="text/javascript">
+    // 초기 상태값 0
+    let count = 0;
+    const handleDown = () => {
+      // TODO : 데이터 갱신
+      count--;
+
+      // TODO : 화면 갱신
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+    const handleUp = () => {
+      // TODO : 데이터 갱신
+      count++;
+
+      // TODO : 화면 갱신
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+    const handleReset = event => {
+      // TODO : 데이터 갱신
+      count = 0;
+
+      // TODO : 화면 갱신
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+  </script>
+
+</body>
+
+</html>

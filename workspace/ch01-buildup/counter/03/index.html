@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- <div id="app">
+    <header>
+      <h1>Counter - JS 로 UI 구성</h1>
+      <p>파일 경로: <span id="filepath"></span></p>
+    </header>
+    <div id="counter">
+      <button type="button" onclick="handleDown()">-</button>
+      <button type="button" onclick="handleReset(event)">0</button>
+      <button type="button" onclick="handleUp()">+</button>
+      <span>0</span>
+    </div> -->
+
+  <!-- 1. 웹 브라우저는 가장 첫 줄부터 html parser 가 parsing 시작,
+    2. script 태그를 만나면 js 엔진이 parsing 시작 
+    3. script 태그에 defer 속성을 추가하거나 module type 이라면 script 는 비동기적으로 처리 -->
+
+  <script type="module">
+    // type 을 모듈로 지정해야만 외부 모듈의 코드를 불러올 수 있다. 
+    // module type 은 html parser 에 의해 type="text/javascript" 를 우선적으로 처리하게 됨. 
+    // 그리고 나중에 module type 을 뒤늦게 실행
+
+    // ji.js 코드를 불러오기
+    import Ji from './ji.js'
+
+    // <script type="text/javascript" src="ji.js"> 를 사용하게 되면, import, export 를 사용할 필요 없음
+    // src 로 스크립트를 연결하게 된다면, 해당 파일 내의 변수가 전역변수가 되기 때문에, 변수간에 충돌이 발생할 수 있음
+    // 모듈끼리는 코드를 블럭단위로 변수 충돌없이 사용할 수 있음
+
+    // 화면 구성 시 JS 로 구성하게 되면, 조금 더 풍부하게 HTML 화면을 구성할 수 있음
+    // 코드 사이사이에 필요한 코드 및 로직을 추가할 수 있고, 동적으로 화면 자체를 구성할 수 있음
+
+    // <h1>Counter - JS로 UI 구성</h1>
+    const h1 = Ji.createElement('h1', null, 'Counter - createElement() 라이브러리 사용')
+    // const h1 = document.createElement('h1');
+    // const h1Txt = document.createTextNode('Counter - JS로 UI 구성');
+    // h1.appendChild(h1Txt);
+
+    // <p>파일 경로: <span id="filepath"></span></p>
+    const p = Ji.createElement('p', null, '파일 경로: ', Ji.createElement('span', { id: 'filepath' }));
+    // const p = document.createElement('p');
+    // const pTxt = document.createTextNode('파일 경로: ');
+    // const pSpan = document.createElement('span');
+    // pSpan.setAttribute('id', 'filepath');
+    // p.appendChild(pTxt);
+    // p.appendChild(pSpan);
+
+    // <button type="button" onclick="handleDown()">-</button>
+    const downBtn = Ji.createElement('button', { type: 'button', onclick: 'handleDown()' }, '-');
+    // const downBtn = document.createElement('button');
+    // const downBtnTxt = document.createTextNode('-');
+    // downBtn.setAttribute('type', 'button');
+    // downBtn.setAttribute('onclick', 'handleDown()');
+    // downBtn.appendChild(downBtnTxt);
+
+    // <button type="button" onclick="handleReset(event)">0</button>
+    const resetBtn = Ji.createElement('button', { type: 'button', onclick: 'handleReset()' }, 0);
+    // const resetBtn = document.createElement('button');
+    // const resetBtnTxt = document.createTextNode('0');
+    // resetBtn.setAttribute('type', 'button');
+    // resetBtn.setAttribute('onclick', 'handleReset(event)');
+    // resetBtn.appendChild(resetBtnTxt);
+
+    // <button type="button" onclick="handleUp()">+</button>
+    const upBtn = Ji.createElement('button', { type: 'button', onclick: 'handleUp()' }, '+');
+    // const upBtn = document.createElement('button');
+    // const upBtnTxt = document.createTextNode('+');
+    // upBtn.setAttribute('type', 'button');
+    // upBtn.setAttribute('onclick', 'handleUp()');
+    // upBtn.appendChild(upBtnTxt);
+
+    // <span>0</span>
+    const resultSpan = Ji.createElement('span', { style: 'margin-left: 10px' }, 0);
+    // const resultSpan = document.createElement('span');
+    // const resultSpanTxt = document.createTextNode('0');
+    // resultSpan.setAttribute('style', 'margin-left: 10px');
+    // resultSpan.appendChild(resultSpanTxt);
+
+
+    // <header>
+    const Header = Ji.createElement('header', null, h1, p);
+    // const Header = document.createElement('header');
+    // Header.appendChild(h1);
+    // Header.appendChild(p);
+
+    // <div id="counter">
+    const Counter = Ji.createElement('div', { id: 'counter' }, downBtn, resetBtn, upBtn, resultSpan);
+    // const Counter = document.createElement('div');
+    // Counter.setAttribute('id', 'counter');
+    // Counter.appendChild(downBtn);
+    // Counter.appendChild(resetBtn);
+    // Counter.appendChild(upBtn);
+    // Counter.appendChild(resultSpan);
+
+    // <div id="app">
+    const App = Ji.createElement('div', { id: 'app' }, Header, Counter);
+    // const App = document.createElement('div');
+    // App.setAttribute('id', 'app');
+    // App.appendChild(Header);
+    // App.appendChild(Counter);
+
+    document.getElementById('root').appendChild(App);
+  </script>
+
+  <script type="module">
+    // DOM 노드를 획득해서 사용하는 것이기 때문에, 위 스크립트 코드가 실행되기 전에 실행되어서 
+    document.querySelector('#filepath').textContent = `ch${document.URL.split('/ch')[1]}`;
+  </script>
+
+  <script type="text/javascript">
+    // 초기 상태값 0
+    let count = 0;
+    const handleDown = () => {
+      // TODO : 데이터 갱신
+      count--;
+
+      // TODO : 화면 갱신
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+    const handleUp = () => {
+      // TODO : 데이터 갱신
+      count++;
+
+      // TODO : 화면 갱신
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+    const handleReset = event => {
+      // TODO : 데이터 갱신
+      count = 0;
+
+      // TODO : 화면 갱신
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+  </script>
+
+</body>
+
+</html>

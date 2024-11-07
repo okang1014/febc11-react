@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+
+    // 프로젝트의 규모가 커질 수록 컴포넌트로 분리하는 것이 좋다. 
+    // 독립적인 기능을 수행하는 컴포넌트 단위로 분리하고, 그러한 기능을 불러와서 조립하는 방법
+    // 함수 하나 당 하나의 컴포넌트로 만드는 방법
+    // 컴포넌트는 기능까지 포함하고 있어야 함
+
+    import Ji from './ji.js';
+
+    function Header() {
+      return (
+        Ji.createElement('header', null,
+          Ji.createElement('h1', null, 'Counter - 컴포넌트로 분리'),
+          Ji.createElement('p', null, '파일 경로: ',
+            Ji.createElement('span', { id: 'filepath' }, `ch${document.URL.split('/ch')[1]}`)))
+      )
+    }
+
+    // counter 컴포넌트 내에는 up, down, reset 기능도 포함
+    function Counter() {
+      let count = 0;
+      const handleDown = () => {
+        count--;
+        const counterSpan = document.querySelector('#counter > span');
+        counterSpan.textContent = count;
+      };
+      const handleUp = () => {
+        count++;
+        const counterSpan = document.querySelector('#counter > span');
+        counterSpan.textContent = count;
+      };
+      const handleReset = event => {
+        count = 0;
+        const counterSpan = document.querySelector('#counter > span');
+        counterSpan.textContent = count;
+      };
+
+      return (
+        Ji.createElement('div', { id: 'counter' },
+          Ji.createElement('button', { type: 'button', onclick: handleDown }, '-'),
+          Ji.createElement('button', { type: 'button', onclick: (event) => handleReset(event) }, 0),
+          Ji.createElement('button', { type: 'button', onclick: handleUp }, '+'),
+          Ji.createElement('span', { style: 'margin-left: 10px' }, 0))
+      )
+    }
+
+    // 애플리케이션 시작점
+    function App() {
+      return (
+        // Header 과 Counter 는 노드가 아닌 컴포넌트 함수임
+        Ji.createElement('div', { id: 'app' }, Header, Counter)
+      );
+    }
+
+    Ji.createRoot(document.getElementById('root')).render(App);
+  </script>
+
+  <!-- 
+  <script type="text/javascript">
+    let count = 0;
+    const handleDown = () => {
+      count--;
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+    const handleUp = () => {
+      count++;
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+    const handleReset = event => {
+      count = 0;
+      const counterSpan = document.querySelector('#counter > span');
+      counterSpan.textContent = count;
+    };
+  </script> -->
+
+</body>
+
+</html>

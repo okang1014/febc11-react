@@ -79,6 +79,12 @@ const ji = (() => {
       // is == 두 값 일치 여부를 판단하는 메서드
       // 두 값을 비교, 같지 않은 경우에(상태가 변경된 경우) 리렌더링
       if (!Object.is(oldValue, newValue)) {
+        // Object.is 객체를 비교하는 것이 아니라, 객체가 가지고 있는 메모리 주소를 비교
+        // 두 객체가 동일한 메모리 주소를 가리키고 있는 경우 true
+        // 두 값이 모두 undefined 이거나 null 인 경우 true
+        // 두 값이 모두 true 이거나 false 이면 true
+        // String 인 경우, 두 값의 글자수, 순서, 모든 글자가 동일한 경우 true
+        // Number 라면 같은 값을 가지고 있거나 NaN 인 경우 true
         _root.render();
         // 새로운 값을 기준으로 새로운 화면 렌더링
       }

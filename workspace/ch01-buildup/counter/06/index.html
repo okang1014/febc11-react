@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter</title>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+
+    import Ji from './ji.js';
+
+    function Header() {
+      return (
+        Ji.createElement('header', null,
+          Ji.createElement('h1', null, 'Counter - 상태 변경 시 자동 리렌더링'),
+
+          Ji.createElement('p', null, '파일 경로: ',
+            Ji.createElement('span', { id: 'filepath' }, `ch${document.URL.split('/ch')[1]}index.html`)))
+      )
+    }
+
+    // counter 컴포넌트 내에는 up, down, reset 기능도 포함
+    function Counter() {
+      // let count = 0;
+      // 클로저에 의해 값이 유지되는 변수 == 자유 변수
+      const [count, setCount] = Ji.useState(10);
+      // useState 함수를 호출하면 배열을 반환
+
+      // 목적 - 데이터가 변경되면 자동으로 화면이 갱신되도록 만들기
+      const handleDown = () => {
+        setCount(count - 1);
+        // count--;
+        // count 의 값을 직접 변경할 수 없고 함수가 실행되어야 값을 변경할 수 있도록 설정, 오류 발생 가능성 저하
+
+        // const counterSpan = document.querySelector('#counter > span');
+        // counterSpan.textContent = count;
+      };
+      const handleUp = () => {
+        setCount(count + 1);
+        // count++;
+        // const counterSpan = document.querySelector('#counter > span');
+        // counterSpan.textContent = count;
+      };
+      const handleReset = event => {
+        setCount(0);
+        // count = 0;
+        // const counterSpan = document.querySelector('#counter > span');
+        // counterSpan.textContent = count;
+      };
+
+      return (
+        Ji.createElement('div', { id: 'counter' },
+          Ji.createElement('button', { type: 'button', onclick: handleDown }, '-'),
+          Ji.createElement('button', { type: 'button', onclick: (event) => handleReset(event) }, 0),
+          Ji.createElement('button', { type: 'button', onclick: handleUp }, '+'),
+          Ji.createElement('span', { style: 'margin-left: 10px' }, count))
+      )
+    }
+
+    // 애플리케이션 시작점
+    function App() {
+      return (
+        // Header 과 Counter 는 노드가 아닌 컴포넌트 함수임
+        Ji.createElement('div', { id: 'app' }, Header, Counter)
+      );
+    }
+
+    Ji.createRoot(document.getElementById('root')).render(App);
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List App</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // 기능을 어느 컴포넌트에 포함되는지 고민 필요
+    // 독립된 컴포넌트는 관련된 UI 와 기능이 모두 포함되는 것이 이상적
+
+    function Header() {
+      return (
+        <header>
+          <h1>Todo List - 기능 추가 :()</h1>
+          <p>파일 경로: <span id="filepath">{`ch${document.URL.split('/ch')[1]}index.html`}</span></p>
+        </header>
+      );
+    }
+
+    function TodoInput({ addItem }) {
+      // 🚨 상태를 관리하기 위한 코드 추가
+      // React 에서는 초기 state 는 아무 것도 없도록 함
+      // setTitle 은 title 이 변경됨에 따라 리렌더링됨
+      // 초기 상태값은 빈 문자열
+      const [title, setTitle] = React.useState('');
+      // 초기 상태값은 4
+      const [nextId, setNextId] = React.useState(4);
+
+      // 항목 추가 관련 기능은 TodoInput 컴포넌트 내에 포함되는 것이 좋음
+      const handleAdd = () => {
+        // DOM API 를 사용해서 input 란 내부의 값을 받아와야 함
+        // 🚨 하지만 React 에서는 DOM API 를 사용하지 않고, 컴포넌트의 상태에 따라 상태가 변경된 부분만 리렌더링을 함
+        if (title.trim() !== '') {
+          const item = { _id: nextId, title, done: false };
+          addItem(item);
+          // 추가 버튼이 클릭될 때마다 id 값도 하나씩 증가하도록 설정
+          setNextId(nextId + 1);
+          setTitle('');
+        }
+      };
+
+      const handleKeyUp = (event) => {
+        if (event.key === 'Enter') handleAdd();
+      };
+
+      // event 객체를 받아서 이벤트 인자로 전달하는 경우, event 매개변수를 포함한 함수 자체를 전달해야함
+      return (
+        <div className="todoinput">
+          <input type="text" autoFocus onKeyUp={handleKeyUp} value={title} onChange={event => setTitle(event.target.value)} />
+          <button type="button" onClick={handleAdd}>추가</button>
+        </div>
+      );
+    }
+
+    function TodoItem({ item }) {
+      return (
+        <li>
+          <span>{item._id}</span>
+          <span>{item.done ? <s>{item.title}</s> : item.title} </span>
+          <button type="button">삭제</button>
+        </li>
+      );
+    }
+
+    function TodoList({ itemList }) {
+      const list = itemList.map(item => <TodoItem key={item._id} item={item} />)
+      return (
+        <ul className="todolist">
+          {list}
+        </ul>
+      );
+    }
+
+    function Todo(props) {
+      return (
+        <div id="main">
+          <div id="container">
+            <ul>
+              <li>
+                <h2>쇼핑 목록</h2>
+                <TodoInput addItem={props.addItem} />
+                <TodoList itemList={props.itemList} />
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer>
+          <p>멋쟁이 사자처럼 FrontEnd BootCamp</p>
+        </footer>
+      );
+    }
+
+    function App() {
+      // 샘플 목록
+      // React 는 상태를 관리, useState 로 만들어진 값을 '변경'하는 경우에만 리렌더링이 자동으로 실행됨
+      // itemList 는 꺼내 사용하는 코드, setItemList 는 상태를 변경하는 메서드
+      const [itemList, setItemList] = React.useState([
+        { _id: 1, title: '두부', done: true },
+        { _id: 2, title: '계란', done: false },
+        { _id: 3, title: '라면', done: true },
+      ]);
+
+      // 관련된 기능을 컴포넌트에 포함시키는 것이 가장 이상적
+      // 조작하고자 하는 데이터를 컴포넌트가 포함하고 있지 않고, 상위 요소로부터 받아와서 조작하는 방법이 있지만 
+      // 상태를 만든 곳에서 관리까지 하는 코드까지 포함해야 유지보수가 편리함
+      // 따라서 itemList 배열의 상태를 변경하는 함수가 addItem();
+
+      const addItem = (item) => {
+        const newItemList = [...itemList, item]; // 객체(또는 배열)일 경우 새로운 객체(주소가 변경된)로 만들어야 화면이 갱신된다
+        setItemList(newItemList); // setter 함수를 이용해야 화면 갱신이 됨
+      }
+
+      return (
+        <div id="todo">
+          <Header />
+          <Todo itemList={itemList} addItem={addItem} />
+          <Footer />
+        </div>
+      );
+    }
+
+    // ReactDOM 에서 root 를 ID 로 갖는 요소를 선택하고, 해당 요소 하위에 App 함수를 실행한 결과를 render
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
+  </script>
+</body>
+
+</html>

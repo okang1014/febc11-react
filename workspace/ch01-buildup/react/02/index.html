@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List App</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // React 의 주목적 -> UI 를 구성, 갱신하는 작업 간소화, 개발자는 데이터를 관리하는데 집중할 수 있음
+
+    function App() {
+      // 샘플 목록
+      const itemList = [
+        { _id: 1, title: '두부', done: true },
+        { _id: 2, title: '계란', done: false },
+        { _id: 3, title: '라면', done: true },
+      ];
+
+      // JSX 로 UI 를 만드는 함수
+      // JSX 는 self-closing 태그에 꼭 닫는 태그를 표기해주어야 함. <input />
+      // 원래 HTML 의 class 는 JS 와는 상관이 없다. 하지만 JS 의 class 와 겹치기 때문에, JSX 아래의 class 는 className 으로 작성해주어야 함
+      // 두 단어 이상으로 이루어진 속성(attribute)은 camelCase 로 작성해주어야 한다.
+
+      return (
+        <div id="todo">
+          <header>
+            <h1>Todo List - React 로 UI 구성 :()</h1>
+            <p>파일 경로: <span id="filepath">{`ch${document.URL.split('/ch')[1]}index.html`}</span></p>
+          </header>
+          <div id="main">
+            <div id="container">
+              <ul>
+                <li>
+                  <h2>쇼핑 목록</h2>
+                  <div className="todoinput">
+                    <input type="text" autoFocus />
+                    <button type="button">추가</button>
+                  </div>
+                  <ul className="todolist">
+                    <li>
+                      <span>1</span>
+                      <span><s>샘플1</s></span>
+                      <button type="button">삭제</button>
+                    </li>
+                    <li>
+                      <span>2</span>
+                      <span>샘플2</span>
+                      <button type="button">삭제</button>
+                    </li>
+                    <li>
+                      <span>3</span>
+                      <span>샘플3</span>
+                      <button type="button">삭제</button>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <footer>
+            <p>멋쟁이 사자처럼 FrontEnd BootCamp</p>
+          </footer>
+        </div>
+      );
+    }
+
+    // ReactDOM 에서 root 를 ID 로 갖는 요소를 선택하고, 해당 요소 하위에 App 함수를 실행한 결과를 render
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List App</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // React 의 주목적 -> UI 를 구성, 갱신하는 작업 간소화, 개발자는 데이터를 관리하는데 집중할 수 있음
+    // 순수 JS 문법이 아니라 JSX 문법이기 때문에 함수 선언 순서에 따라 발생하는 호이스팅 문제가 발생하지는 않는다.
+    // 추후에 하나의 컴포넌트 당 하나의 파일로 사용되기 때문에 문제 발생 여지 감소
+
+    function Header() {
+      // 아래의 노드를 return 
+      return (
+        <header>
+          <h1>Todo List - 컴포넌트 분리 :()</h1>
+          <p>파일 경로: <span id="filepath">{`ch${document.URL.split('/ch')[1]}index.html`}</span></p>
+        </header>
+      );
+    }
+
+    function TodoInput() {
+      return (
+        <div className="todoinput">
+          <input type="text" autoFocus />
+          <button type="button">추가</button>
+        </div>
+      );
+    }
+
+    // JSX 문법에서 태그 사이에 JS 코드가 들어가는 경우는 {} 로 묶어줌
+    // 그렇지 않은 경우 JS 코드 그대로 입력해주면 된다.
+    function TodoItem({ item }) {
+      return (
+        <li>
+          <span>{item._id}</span>
+          <span>{item.done ? <s>{item.title}</s> : item.title} </span>
+          <button type="button">삭제</button>
+        </li>
+      );
+    }
+
+    // 구조분해할당을 사용해서 바로 상위요소에게 전달받은 속성값을 별도로 추출, 획득해서 사용하는 것이 아니라 직접 사용할 수 있다.
+    // key 속성은 react 에서 요구하는 key 값
+    // item 은 자식 컴포넌트인 TodoItem 이 사용하는 속성 전달
+
+    // map 은 메서드 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환
+    function TodoList({ itemList }) {
+      const list = itemList.map(item => <TodoItem key={item._id} item={item} />)
+      return (
+        <ul className="todolist">
+          {list}
+        </ul>
+      );
+    }
+
+    // 상위 컴포넌트에게 전달받은 속성(properties)은 함수의 매개변수로 전달할 수 있다.
+    // 매개변수명은 개발자 작성 임의의 식별자, 다만 직관적인 식별자 명이 필요함
+    function Todo(props) {
+      return (
+        <div id="main">
+          <div id="container">
+            <ul>
+              <li>
+                <h2>쇼핑 목록</h2>
+                <TodoInput />
+                <TodoList itemList={props.itemList} />
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      );
+    }
+
+    function Footer() {
+      return (
+        <footer>
+          <p>멋쟁이 사자처럼 FrontEnd BootCamp</p>
+        </footer>
+      );
+    }
+
+    function App() {
+      // 샘플 목록
+      const itemList = [
+        { _id: 1, title: '두부', done: true },
+        { _id: 2, title: '계란', done: false },
+        { _id: 3, title: '라면', done: true },
+      ];
+
+      // 컴포넌트 분리의 기준 - 기본적으로 최소 두 번 이상 사용되는가?
+      // 헤더, 푸터의 경우는 재활용이 필요
+      // 메인 내에서도 반복적으로 사용하는 요소가 있을 수 있음
+
+      // React 에서는 태그명 == 컴포넌트명
+      // 그리고 필요한 인자 값을 속성의 형태로 전달하면 된다.
+
+      // 자식 컴포넌트에 속성값으로 전달할 수 있음
+      // 그리고 props 를 통해 자식 컴포넌트에서 사용하고, 또 다시 자식 컴포넌트에게 전달할 수 있음
+
+      return (
+        <div id="todo">
+          <Header />
+          <Todo itemList={itemList} />
+          <Footer />
+        </div>
+      );
+    }
+
+    // ReactDOM 에서 root 를 ID 로 갖는 요소를 선택하고, 해당 요소 하위에 App 함수를 실행한 결과를 render
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+
+  </script>
+</body>
+
+</html>

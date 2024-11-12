@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello - React :()</title>
+  <!-- React CDN - Content Delivery Network 지리적으로 분산된 서버를 연결한 네트워크
+   이번에는 unpkg.com 에서 CDN 불러오기-->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/javascript">
+    // 화면을 구성하는 App 이라는 함수
+    // DOM API 를 사용하여 UI 구성
+    function App() {
+      // document createElement 는 하나의 요소 노드만 만듦
+      // React.createElement 는 요소 노드, 속성 노드, 자식 노드까지 한 번에 생성할 수 있음
+      return React.createElement('h1', null, 'Hello React');
+    }
+
+    // App 을 호출한 결과를 root 노드에 append
+    // document.getElementById('root').appendChild(App());
+    // 내가 선택한 root 노드를 createRoot ReactDOM.createRoot 로 생성
+    // render 를 통해 React.createElement() 메서드 활용
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App, null))
+  </script>
+</body>
+
+</html>

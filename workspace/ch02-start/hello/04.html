@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello - React :()</title>
+  <!-- React CDN - Content Delivery Network 지리적으로 분산된 서버를 연결한 네트워크
+   이번에는 unpkg.com 에서 CDN 불러오기-->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <!-- Babel 라이브러리 CDN 추가, JSX 트랜스파일러 라이브러리 -->
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+  <!-- umd 버전은 모든 환경(Node.js, browser)에서 사용 가능한 버전, standalone 은 브라우저에만 사용 가능한 버전 -->
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // 타입이 JS 인 경우, 코드가 JS 문법이 아닌 경우 오류 발생
+    // 타입을 babel 로 지정된 영역에서는 JSX 코드를 JS 코드로 변환
+    function App() {
+      // JSX 문법으로 html 태그 그대로 생성 가능
+      return <h1>Hello JSX</h1>
+      // return React.createElement('h1', null, 'Hello React');
+    }
+
+    // React 에서 JSX 문법을 사용한 컴포넌트를 생성하면, 해당 컴포넌트를 태그 형태(</>)로 컴포넌트를 호출할 수 있음
+    // 하지만!! 이는 자바스크립트 문법이 아니기 때문에 에러 발생 -> Babel library 로 transpiling needed(이번 예제에서만)
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+  </script>
+</body>
+
+</html>

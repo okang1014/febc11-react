@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>자바스크립트 모듈</title>
 </head>
+
 <body>
   <header>
     <h1>module 예제 :)</h1>
@@ -14,14 +16,32 @@
     <p>개발자 도구의 콘솔을 확인하세요.</p>
   </div>
   <footer>
-    <p>Front-End School 9기</p>
+    <p>Front-End BootCamp 11기</p>
   </footer>
 
   <script type="module">
     document.querySelector('#filepath').textContent = `ch${document.URL.split('/ch')[1]}index.html`;
 
-    
+    // export default 로 export 한 함수는 MyMath 에 할당
+    // 특정 컴포넌트를 import 하기 위해 Named export 
+    // 구조 분해 할당을 이용해서 바로 사용할 수 있음
+    import MyMath, { plus, minus, avg } from './export.js';
+
+    // 함수에 전달되는 값을 인수
+    console.log(plus(10, 20)); // 30
+    console.log(minus(10, 20)); // -10
+    console.log(avg(10, 20)); // NaN
+    // 왜냐믄 (10 + 20 + undefined) / 3 이 됨
+    console.log(avg(10, 20, 30)); // NaN
+
+    // MyMath 에는 export.js 의 multiple() 가 대입됨
+    // import MyMath from './export.js';
+    console.log(MyMath.multiple(10, 20));
+
+    // export 하는 방식에 따라 import 하여 사용하는 방식의 차이가 있음
+    // 주로 컴포넌트는 하나의 파일에 하나의 모듈을 가지고 있음
   </script>
 
 </body>
+
 </html>

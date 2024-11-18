@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EditAddress from "./components/EditAddress";
+import { produce } from "immer";
 
 // 주소 수정하는 화면 구성
 function App() {
@@ -43,27 +44,42 @@ function App() {
     // setter 함수를 사용해도 동일한 객체이기 때문에 리렌더링되지 않음(상태변경 X)
 
     // 상태의 불변성을 지키기 위한 추가 작업이 필요
-    const newAddressBook = user.extra.addressBook.map((address) => {
-      if (address.id === Number(event.target.name)) {
-        return { ...address, value: event.target.value };
-        // 변경한 주소록 값을 꺼내서, 변경된 객체만 찾아서 value 를 수정
-        // 수정된 부분에 대해서만 수정한 새로운 객체 반환
-      } else {
-        return address;
-        // 변경된 것이 없으면 원본 객체 그대로 반환
-      }
-    });
+    // 그나마 주소를 변경한다는 전제이기 때문에 덜 복잡한 편
+    // 만일 주소가 아닌 다른 내용도 추가적으로 변경된다고 하면, 더 복잡해진다.
+    // const newAddressBook = user.extra.addressBook.map((address) => {
+    //   if (address.id === Number(event.target.name)) {
+    //     return { ...address, value: event.target.value };
+    //     // 변경한 주소록 값을 꺼내서, 변경된 객체만 찾아서 value 를 수정
+    //     // 수정된 부분에 대해서만 수정한 새로운 객체 반환
+    //   } else {
+    //     return address;
+    //     // 변경된 것이 없으면 원본 객체 그대로 반환
+    //   }
+    // });
 
-    const newState = {
-      // user 를 그대로 복사, extra 는 새로운 값으로 대체
-      ...user,
-      extra: {
-        ...user.extra,
-        // 기존의 user.extra 정보를 그대로 복사
-        addressBook: newAddressBook,
-        // 수정된 주소를 포함한 newAddressBook 으로 교체
-      },
-    };
+    // const newState = {
+    //   // user 를 그대로 복사, extra 는 새로운 값으로 대체
+    //   ...user,
+    //   extra: {
+    //     ...user.extra,
+    //     // 기존의 user.extra 정보를 그대로 복사
+    //     addressBook: newAddressBook,
+    //     // 수정된 주소를 포함한 newAddressBook 으로 교체
+    //   },
+    // };
+
+    // immer 를 사용해서 불변성 유지
+    // immer 라이브러리의 produce 함수 호출
+    const newState = produce(user, (draft) => {
+      const address = draft.extra.addressBook.find(
+        // address.id 와 event.target.name 의 값이 동일한 경우를 찾아라
+        (address) => address.id === Number(event.target.name)
+      );
+      address.value = event.target.value;
+    });
+    // produce 함수 안에 user 객체를 매개변수에 전달
+    // 두 번째 매개변수는 함수 전달, user 객체를 복사한 새로운 객체가 결국 draft
+    // user 객체를 복사한 새로운 객체(draft)를 만들어서 반환 -> immer 라이브러리가 자동으로 모든 부모 객체도 복제해서 반환해줌
 
     // 디버깅용 코드 - 객체 비교 코드(user vs newState)
     // 회사 주소 변경 시, 기존 상태의 user 정보와 newState 의 정보가 달라야 함

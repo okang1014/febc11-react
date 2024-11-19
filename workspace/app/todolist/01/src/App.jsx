@@ -1,3 +1,4 @@
+import { produce } from "immer";
 import Footer from "@components/Footer";
 import Header from "@components/Header";
 import Todo from "@pages/Todo";
@@ -20,11 +21,22 @@ function App() {
   // 할 일 완료/미완료 처리
   const toggleDone = (_id) => {
     // 데이터 갱신(상태 변경)
-    const newItemList = [...itemList]; // 불변성을 지키기 위해 원래 배열을 한 번 복사
-    const item = itemList.find((item) => item._id === _id);
-    item.done = !item.done;
-    setItemList(); // 상태 변경을 위한 새로운 배열 전달
+    // const newItemList = [...itemList]; // 불변성을 지키기 위해 원래 배열을 한 번 복사
+    // const item = itemList.find((item) => item._id === _id);
+    // item.done = !item.done;
+    // setItemList(newItemList); // 상태 변경을 위한 새로운 배열 전달
     // spread 연산자를 사용해서 기존 배열의 값을 복사한 새로운 배열을 생성, 상태값 변경
+    // 상태 변경에 따른 리렌더링은 가능하지만 상태의 불변성이 확보되지 않은 상황 -> immer 라이브러리를 쓰자
+    const newItemList = produce(itemList, (draft) => {
+      const item = draft.find((item) => item._id === _id);
+      // itemList 를 draft 라는 proxy 객체로 복제, draft 에 실행할 함수 추가
+      item.done = !item.done;
+    });
+
+    setItemList(newItemList);
+
+    console.log("예전 itemList", itemList);
+    console.log("새로운 itemList", newItemList);
   };
 
   // 할 일 삭제

@@ -20,6 +20,12 @@ function App() {
     watch,
     formState: { errors },
   } = useForm({
+    // 사용자 입력값 최초 검증 시기 여기서 설정 가능
+    mode: "onSubmit",
+    // onSubmit(default), onBlur(focus 이탈), onChange(타이핑하는 순간), onTouched
+    reValidateMode: "onBlur", // 재검증 시점, onChange(default)
+    criteriaMode: "firstError", // 에러 객체에 첫 오류 한 개만 포함(firstError - default)? Or 전부 포함 (all)
+
     // useForm 의 기본값
     defaultValues: {
       // useForm 의 initialValue 로 등록
@@ -105,6 +111,8 @@ function App() {
     console.log("서버에 전송", user);
   };
 
+  console.log(errors); // console 에서 에러 확인
+
   return (
     <>
       <h1>06 회원가입 입력값 검증(feat. react-hook-form)</h1>
@@ -123,6 +131,12 @@ function App() {
               value: 2, // 최소 입력 길이
               message: "2글자 이상 입력하세요.", // 안내 메시지
             },
+            pattern: {
+              value: /^[^\d]*$/, // 숫자 포함 불가
+              message: "숫자는 입력할 수 없습니다.",
+            },
+            // firstError - 대표 에러 메시지 출력
+            // all - 모든 오류를 다 출력
           })}
           // 함수 호출 결과로 객체 반환, 전개 연산자로 풀면 자동으로 name, value, onChange, ref 속성이 자동으로 추가
           // 첫번째 매개변수는 name 을 가지는 요소

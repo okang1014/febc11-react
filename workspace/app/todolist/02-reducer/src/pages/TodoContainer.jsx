@@ -1,6 +1,6 @@
 import Todo from "@pages/Todo";
 import TodoReducer from "@pages/TodoReducer";
-import { useReducer, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 
 // 컨테이너 컴포넌트로 상태관리 및 비즈니스 로직을 전부 현 파일에서 관리
 // 하위 표현 컴포넌트를 표현하는 코드 외에 UI 를 구성하는 코드는 없음
@@ -15,17 +15,20 @@ function TodoContainer() {
 
   // setItemList 를 호출하면 TodoReducer 를 사용하게 함
   const [itemList, itemListDispatch] = useReducer(TodoReducer, sampleItemList);
-  const [nextId, setNextId] = useState(sampleItemList.length + 1);
+  // id 가 변경되는 경우 setter 가 실행, 페이지가 리렌더링됨
+  // const [nextId, setNextId] = useState(sampleItemList.length + 1);
+  // useState 대신 useRef 로 데이터 유지
+  const nextId = useRef(sampleItemList.length + 1);
 
   // 할 일 추가
   const addItem = (title) => {
     itemListDispatch({
       type: "ADD",
-      value: { _id: nextId, title, done: false },
+      value: { _id: nextId.current, title, done: false },
     });
     // const newItemList = [...itemList, item]; // 객체(또는 배열)일 경우 새로운 객체(주소가 변경된)로 만들어야 화면이 갱신된다
     // setItemList(newItemList); // setter 함수를 이용해야 화면 갱신이 됨
-    setNextId(nextId + 1);
+    nextId.current += 1;
   };
 
   // 할 일 완료/미완료 처리

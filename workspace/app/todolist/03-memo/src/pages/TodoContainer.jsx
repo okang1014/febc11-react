@@ -10,9 +10,9 @@ function TodoContainer() {
     { _id: 3, title: "라면", done: true },
   ];
 
-  for (let i = 4; i <= 10000; i++) {
-    sampleItemList.push({ _id: i, title: `샘플 - ${[i]}`, done: false });
-  }
+  // for (let i = 4; i <= 10000; i++) {
+  //   sampleItemList.push({ _id: i, title: `샘플 - ${[i]}`, done: false });
+  // }
 
   // setItemList 를 호출하면 TodoReducer 를 사용하게 함
   const [itemList, itemListDispatch] = useReducer(TodoReducer, sampleItemList);

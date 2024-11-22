@@ -17,7 +17,7 @@ function Header() {
   return (
     <>
       <header>
-        <h1>리액트 라우터</h1>
+        <h1>리액트 라우터 - 01 라우터 구현</h1>
         {/* a 태그 대신 link 컴포넌트 */}
         <Link to="home.html">home</Link>
         <br />

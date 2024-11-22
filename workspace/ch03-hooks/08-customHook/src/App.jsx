@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
+import { PacmanLoader } from "react-spinners";
 
 const API_SERVER = "https://todo-api.fesp.shop/api";
 
 function App() {
   // 서버로부터 받은 데이터를 data 로 상태 관리
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   // error 메시지 발생 시 리렌더링, 화면에 표시하도록
+  const [error, setError] = useState(null);
+  // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
 
   // fetch API 를 사용해서 Todo API 서버에 요청 전송, 데이터를 받아오는 함수
   const fetchTodo = async (fetchParams) => {
     try {
+      setIsLoading(true); // 로딩 상태 변경, 처음 요청을 보냈을 시, 로딩 상태 true 로 변경
       // 실행 결과 값 Promise 객체 반환 - async await 를 사용하는 것이 좋음
       const res = await fetch(API_SERVER + fetchParams.url);
       console.log(res);
@@ -34,6 +38,10 @@ function App() {
       });
       // 500 오류는 두루뭉술하게, 그 외 사용자 입력 문제는 명시적으로
       setData(null); // 에러가 있는 경우, data 는 null 로 초기화
+    } finally {
+      // 서버 데이터 응답 받기 성공 또는 실패 이후, 실행 코드
+      setIsLoading(false);
+      // try 아예 밑에 setIsLoading 상태 변경이 가능, 하지만 try...catch...finally 가 세트이기에 가독성 측면 및 직관성 측면에서 조금 더 좋다
     }
   };
 
@@ -53,6 +61,8 @@ function App() {
     <>
       <h1>08 Custom Hook - fetch API 사용(커스텀 훅 미사용)</h1>
       <h2>할 일 목록</h2>
+      {/* 서버 응답이 지연되는 경우 안내 메시지 출력, React-spinner 사용하여 로딩 아이콘이 출력되도록 함*/}
+      {isLoading && <PacmanLoader color="aqua" />}
       {/* error 발생 시 화면 출력 */}
       {error && <p style={{ color: "red" }}>{error.message}</p>}
       {/* data 가 있는 경우 ul 요소 반환 및 데이터 출력 */}

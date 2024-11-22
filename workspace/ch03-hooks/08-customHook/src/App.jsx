@@ -4,7 +4,9 @@ const API_SERVER = "https://todo-api.fesp.shop/api";
 
 function App() {
   // 서버로부터 받은 데이터를 data 로 상태 관리
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  // error 메시지 발생 시 리렌더링, 화면에 표시하도록
 
   // fetch API 를 사용해서 Todo API 서버에 요청 전송, 데이터를 받아오는 함수
   const fetchTodo = async (fetchParams) => {
@@ -18,12 +20,20 @@ function App() {
 
       if (jsonData.ok) {
         setData(jsonData.items);
+        setError(null); // data 가 있는 경우, error 는 null 로 초기화
       } else {
         throw new Error(jsonData.error.message);
       }
     } catch (err) {
       // 에러 처리
       console.error(err); // console 에 에러 메시지 출력
+      // 서버 응답에 실패가 있는경우(정상적인 요청 x + 서버측에 문제)
+      setError({
+        message:
+          "일시적인 문제로 인해 작업 처리에 실패했습니다. 잠시 후 다시 요청해 주시기 바랍니다.",
+      });
+      // 500 오류는 두루뭉술하게, 그 외 사용자 입력 문제는 명시적으로
+      setData(null); // 에러가 있는 경우, data 는 null 로 초기화
     }
   };
 
@@ -31,7 +41,7 @@ function App() {
   // 따라서 해당 함수는 useEffect 내부에서 사용
   // 빈 배열을 dependency 에 전달하는 경우, 마운트되는 단계에서만 setup 함수 실행
   useEffect(() => {
-    const fetchParams = { url: "/todolist" };
+    const fetchParams = { url: "/todolist?delay=3000" }; // api url 에는 특정 시간 이후 응답을 받게 할 수 있음 delay 속성
     fetchTodo(fetchParams);
   }, []);
 
@@ -43,6 +53,8 @@ function App() {
     <>
       <h1>08 Custom Hook - fetch API 사용(커스텀 훅 미사용)</h1>
       <h2>할 일 목록</h2>
+      {/* error 발생 시 화면 출력 */}
+      {error && <p style={{ color: "red" }}>{error.message}</p>}
       {/* data 가 있는 경우 ul 요소 반환 및 데이터 출력 */}
       {data && (
         <ul>

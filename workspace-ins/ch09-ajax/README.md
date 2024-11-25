@@ -94,7 +94,7 @@ HTTP/2와 HTTP/3는 기존 HTTP/1.x의 비효율성을 개선하기 위해 다�
 ##### url 추가
 - Variable: url
 - Type: default
-- initial value: `https://11.fesp.shop`
+- initial value: `https://todo-api.fesp.shop`
 - Ctrl + S 눌러서 저장
 
 #### Collection 추가

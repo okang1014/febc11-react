@@ -11,6 +11,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 const router = createBrowserRouter(
   [
     {
+      // localhost/
       path: "/",
       element: <Layout />,
       children: [
@@ -23,10 +24,19 @@ const router = createBrowserRouter(
         // 이는 각 페이지에서 경로를 절대경로로 지정함으로써 해결할 수 있음
         // React Router 의 Link to 와 a href 의 차이
         { path: "add", element: <TodoAdd /> },
-        { path: "edit", element: <TodoEdit /> },
         // 상세 페이지의 url 에서 각 게시물의 id 지정, path 에 :_id 를 지어줌으로써 동적으로 url 이 지정되도록 함(세그먼트)
-        { path: "list/:_id", element: <TodoDetail /> }, // TodoDetail 에서 useParams() 리액트 라우터 hook 을 사용하여 id 값을 동적으로 지정할 수 있음
+        // TodoDetail 에서 useParams() 리액트 라우터 hook 을 사용하여 id 값을 동적으로 지정할 수 있음
         // : 이후에는 변수 이름이 됨
+        {
+          path: "list/:_id", // localhost/list/:_id
+          element: <TodoDetail />,
+          children: [
+            // localhost/list/:_id/edit
+            { path: "edit", element: <TodoEdit /> },
+            // edit 는 detail 의 자식 컴포넌트로.
+            // TodoEdit 이 보이려면 list/edit 이런 식으로 접근
+          ],
+        },
       ],
     },
   ],

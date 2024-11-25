@@ -14,6 +14,7 @@ const router = createBrowserRouter(
       // localhost/
       path: "/",
       element: <Layout />,
+      errorElement: <ErrorPage />, // 404 error 발생 시, 에러에 해당하는 컴포넌트로 이동
       children: [
         { index: true, element: <Navigate to="/home" /> }, // / 까지만 입력되고 이후 주소값이 없는 경우, home 으로 이동
         { path: "home", element: <Home /> },

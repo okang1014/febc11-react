@@ -2,7 +2,7 @@ import { Link, Outlet, useParams } from "react-router-dom";
 
 function TodoDetail() {
   // useParams 리액트 라우터 훅 사용
-  // id
+  // id 값을 uri 로부터 추출, 동적으로 uri 세그먼트를 가져올 때 주로 사용
   const { _id } = useParams();
   console.log(_id);
   return (

@@ -7,14 +7,30 @@ function Header() {
       <nav>
         <div>
           <ul>
+            {/* NavLink 로 현재 위치 탭을 표시하기 위해 사용 */}
             <li>
-              <NavLink to="./home">Home</NavLink>
+              <NavLink
+                to="home"
+                className={({ isActive }) => (isActive ? "menu-dark" : "menu")}
+              >
+                Home
+              </NavLink>
             </li>
             <li>
-              <NavLink to="./about">About</NavLink>
+              <NavLink
+                to="about"
+                className={({ isActive }) => (isActive ? "menu-dark" : "menu")}
+              >
+                About
+              </NavLink>
             </li>
             <li>
-              <NavLink to="./list">TodoList</NavLink>
+              <NavLink
+                to="list"
+                className={({ isActive }) => (isActive ? "menu-dark" : "menu")}
+              >
+                TodoList
+              </NavLink>
             </li>
           </ul>
         </div>

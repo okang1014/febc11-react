@@ -24,7 +24,7 @@ const router = createBrowserRouter(
         // 라우터 설계하였을 때 계속 depth 가 깊어지는 상황이 생긴다(내가 그랬다)
         // 이는 각 페이지에서 경로를 절대경로로 지정함으로써 해결할 수 있음
         // React Router 의 Link to 와 a href 의 차이
-        { path: "add", element: <TodoAdd /> },
+        { path: "list/add", element: <TodoAdd /> },
         // 상세 페이지의 url 에서 각 게시물의 id 지정, path 에 :_id 를 지어줌으로써 동적으로 url 이 지정되도록 함(세그먼트)
         // TodoDetail 에서 useParams() 리액트 라우터 hook 을 사용하여 id 값을 동적으로 지정할 수 있음
         // : 이후에는 변수 이름이 됨

@@ -1,5 +1,5 @@
 # 멋쟁이 사자처럼 Front-End BootCamp 11기: React 프로그래밍
-* 예제 테스트(GitHub Page): <https://github.com/uzoolove/febc11-react/tree/main/workspace-ins>
+* 예제 테스트(GitHub Page): <https://uzoolove.github.io/febc11-react/workspace-ins>
 
 ## 수업 목차
 

@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 function TodoList() {
   return (
     <div id="main">
       <h2>할일 목록</h2>
       <div className="todo">
-        <Link to="/add">추가</Link>
+        <Link to="/list/add">추가</Link>
         <br/>
         <form className="search">
           <input type="text" autoFocus />
@@ -29,6 +29,8 @@ function TodoList() {
           </li>
         </ul>
       </div>
+
+      <Outlet />
     </div>
   );
 }

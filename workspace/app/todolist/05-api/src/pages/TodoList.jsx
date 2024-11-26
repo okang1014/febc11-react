@@ -32,11 +32,12 @@ function TodoList() {
   const axios = useAxiosInstance();
 
   // 삭제 작업
-  const handleDelete = (_id) => {
+  const handleDelete = async (_id) => {
     try {
-      alert("할 일이 삭제되었습니다.");
       // TODO: 삭제
-      axios.delete(`/todolist/${_id}`);
+      await axios.delete(`/todolist/${_id}`);
+
+      alert("할 일이 삭제되었습니다.");
     } catch (err) {
       console.log(err);
       alert("할 일 삭제에 실패하였습니다.");

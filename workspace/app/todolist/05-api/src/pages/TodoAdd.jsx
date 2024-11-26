@@ -25,8 +25,8 @@ function TodoAdd() {
     const xhr = new XMLHttpRequest();
 
     // 서버 요청 정보 추가
-    // xhr.open("POST", "https://todo-api.fesp.shop/api/todolist"); // 첫 매개변수 request method, 다음 매개변수는 요청할 서버 주소
-    xhr.open("POST", "https://todo-api.fesp.shop/api/todolist?delay=10000000"); // ?delay 이후에는 delay 시간 지정 가능(timeout 지정용)
+    xhr.open("POST", "https://todo-api.fesp.shop/api/todolist"); // 첫 매개변수 request method, 다음 매개변수는 요청할 서버 주소
+    // xhr.open("POST", "https://todo-api.fesp.shop/api/todolist?delay=10000000"); // ?delay 이후에는 delay 시간 지정 가능(timeout 지정용)
 
     xhr.setRequestHeader("Content-Type", "application/json"); // 서버에 전달되는 body 데이터 타입 지정(JSON)
     xhr.responseType = "json"; // 서버로부터 전달받는 데이터 타입 지정(JSON), response 에 저장되는 응답 데이터가 JSON.parse() 결과로 저장됨

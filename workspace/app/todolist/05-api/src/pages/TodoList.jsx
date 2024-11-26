@@ -2,6 +2,7 @@ import TodoListItem from "@pages/TodoListItem";
 import useFetch from "@hooks/useFetch";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import useAxiosInstance from "@hooks/useAxiosInstance";
 
 // const dummyData = {
 //   items: [
@@ -27,15 +28,18 @@ function TodoList() {
 
   const { data } = useFetch({ url: "/todolist" }); // useFetch 커스텀 훅을 사용, url 을 추가한 이후, data 만 추출
 
+  // axios 인스턴스
+  const axios = useAxiosInstance();
+
   // 삭제 작업
   const handleDelete = (_id) => {
     try {
       alert("할 일이 삭제되었습니다.");
-
-      // 목록 다시 조회하는 작업 필요
+      // TODO: 삭제
+      axios.delete(`/todolist/${_id}`);
     } catch (err) {
       console.log(err);
-      alert("할 일 수정에 실패하였습니다.");
+      alert("할 일 삭제에 실패하였습니다.");
     }
   };
 

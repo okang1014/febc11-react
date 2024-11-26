@@ -37,7 +37,6 @@ function TodoEdit() {
       // TODO : API 서버에 수정 요청
       await axios.patch(`/todolist/${item._id}`, formData);
       // 두 번째 매개변수는 body (수정된 내용)
-      // request 의 body 에 formData 를 추가하여 서버에 요청
 
       alert("할 일이 수정되었습니다.");
 

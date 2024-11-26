@@ -21,6 +21,20 @@ function TodoList() {
   // 초기 상태값(데이터) 지정
   const [data, setData] = useState();
 
+  // 삭제 작업
+  const handleDelete = (_id) => {
+    try {
+      // TODO : API 에 서버 삭제 요청
+      // 클릭 이벤트이기 때문에 기본 이벤트 제한 필요 없음
+      alert("할 일이 삭제되었습니다.");
+
+      // 목록 다시 조회하는 작업 필요
+    } catch (err) {
+      console.log(err);
+      alert("할 일 수정에 실패하였습니다.");
+    }
+  };
+
   useEffect(() => {
     setData(dummyData);
   }, []);
@@ -31,7 +45,7 @@ function TodoList() {
   // 최초에는 itemList 는 빈객체, 그 이후, 항목이 추가
   const itemList = data?.items.map((item) => (
     // key 값 지정 - list 요소는 필수
-    <TodoListItem key={item._id} item={item} />
+    <TodoListItem key={item._id} item={item} handleDelete={handleDelete} />
   ));
 
   return (

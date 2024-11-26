@@ -1,19 +1,49 @@
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 function TodoAdd() {
+  // 입력값 검증 - react hook form 사용
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm(); // 기본 설정 유지
+
+  const onSubmit = (item) => {
+    console.log("서버에 전송", item);
+  };
+
   return (
     <div id="main">
       <h2>할일 추가</h2>
       <div className="todo">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="title">제목 :</label>
-          <input type="text" id="title" autoFocus />
+          <input
+            type="text"
+            id="title"
+            autoFocus
+            {...register("title", {
+              required: "제목을 입력하세요.",
+            })}
+          />
+          {/* error 메시지 출력 */}
+          <div className="input-error">{errors.title?.message}</div>
           <br />
           <label htmlFor="content">내용 :</label>
-          <textarea id="content" cols="23" rows="5"></textarea>
+          <textarea
+            id="content"
+            cols="23"
+            rows="5"
+            {...register("content", {
+              required: "내용을 입력하세요.",
+            })}
+          ></textarea>
+          <div className="input-error">{errors.content?.message}</div>
           <br />
-          <Link to="/list/1">추가</Link>
-          {/* 리액트 라우터 사용 시, 상대 경로에 / 를 추가하지 않게 되면 현재 링크에 to 이하 속성을 전달, 절대 경로 형태로 바꿔줌, 가능한 절대 경로로 표시 */}
+          <button type="submit">추가</button>
+          {/* submit 타입 버튼으로 변경 */}
           <Link to="/list">취소</Link>
         </form>
       </div>

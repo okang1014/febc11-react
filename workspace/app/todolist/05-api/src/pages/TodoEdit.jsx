@@ -1,31 +1,47 @@
+import useAxiosInstance from "@hooks/useAxiosInstance";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 function TodoEdit() {
-  // Outlet 으로부터 전달받은 context 를 useOutletContext(react-router 훅)으로 추출하여 prop 으로 사용
-  // const props = useOutletContext();
   const { item } = useOutletContext();
 
-  // 프로그래밍 방식으로 페이지 이동 - 리액트 라우터 제공 훅
-  // 원하는 시점에 특정 페이지로 이동, navigate 함수 반환
   const navigate = useNavigate();
 
-  // 수정 작업
-  const onSubmit = (e) => {
-    // 수정, 삭제는 성공 여부를 사용자의 눈으로 확인할 수 없기 때문에 별도의 표시가 필요
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setFocus,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: item.title,
+      content: item.content,
+      done: item.done,
+    },
+  }); // react-hook-form 초기값 지정
+  // 과거 데이터를 채워놓고 수정 시작
+
+  // axios 인스턴스
+  const axios = useAxiosInstance();
+
+  const onSubmit = async (formData) => {
     try {
-      // submit 은 기본적으로 리프레시, 따라서 SPA 에는 적절치 않아. 브라우저 기본 동작 취소
-      e.preventDefault();
+      // e.preventDefault(); // handleSubmit 에 내부적으로 구현되어 있음
+
+      // useAxios({url: '/todolist', method: 'PATCH', body: {title: '', content: ''}});
+      // 커스텀 훅은 컴포넌트 가장 상위에서만 사용되어야 하며, 이벤트 핸들러 내에 직접 사용할 수 없다
+      // 조회는 페이지 로딩 시 사용 가능하지만, 등록, 수정, 삭제는 사용자의 액션이 필요하기에 단순 훅으로는 사용이 어렵다
+      // useAxios, useFetch 라이브러리는 페이지 로딩 후 데이터를 조회할 때만 사용 가능하다
 
       // TODO : API 서버에 수정 요청
+      await axios.patch(`/todolist/${item._id}`, formData);
+      // 두 번째 매개변수는 body (수정된 내용)
+      // request 의 body 에 formData 를 추가하여 서버에 요청
 
       alert("할 일이 수정되었습니다.");
 
-      // 할 일 상세보기로 이동
-      // navigate(`..`, { relative: true }); // 현재 경로 기준 한 단계 위 경로로 이동, 상대 경로로 지정
-      // navigate(`/list/${item._id}`); // 절대 경로로 이동
-      // navigate(`/list/${item._id}`, { replace: true }); // 절대 경로로 이동, 뒤로가기 시 다시 수정화면으로 가는 것이 아니라, 그 전 화면으로 이동, 마지막 히스토리를 상세페이지로 대체하게 됨, 따라서 뒤로가기 누르는 경우 다시 상세 페이지로 사용, window.history.replaceState()
-      navigate(-1); // navigate 에 숫자를 전달하면 히스토리 back 의 효과, window.history.back(-1)
-      // 주의: 위 방법들은 수정한 이후의 정보가 표시되지는 않음
+      navigate(-1);
     } catch (err) {
       console.log(err);
       alert("할 일 수정에 실패하였습니다.");
@@ -36,26 +52,37 @@ function TodoEdit() {
     <>
       <h2>할일 수정</h2>
       <div className="todo">
-        {/* submit 이벤트 발생 시, onSubmit 함수 실행 */}
-        <form onSubmit={onSubmit}>
+        {/* handleSubmit 은 react-hook-form 에서 제공되는 메서드 */}
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="title">제목 :</label>
-          {/* defaultValue 로 선언하여 비제어 컴포넌트로 지정 */}
-          {/* 제어 컴포넌트 지정 시, React 로 제어, 비제어 컴포넌트 지정 시, 브라우저 자동으로 진행 */}
-          <input type="text" id="title" defaultValue={item.title} autoFocus />
+          <input
+            type="text"
+            id="title"
+            autoFocus
+            {...register("title", {
+              required: "제목을 입력하세요.",
+            })}
+          />
+          {/* error 메시지 출력 */}
+          <div className="input-error">{errors.title?.message}</div>
           <br />
           <label htmlFor="content">내용 :</label>
           <textarea
             id="content"
             cols="23"
             rows="5"
-            defaultValue={item.content}
+            {...register("content", {
+              required: "내용을 입력하세요.",
+            })}
           />
+          <div className="input-error">{errors.content?.message}</div>
           <br />
           <label htmlFor="done">완료 :</label>
-          <input type="checkbox" id="done" defaultChecked />
+          {/*  */}
+          <input type="checkbox" id="done" {...register("done")} />
           <br />
           <button type="submit">수정</button>
-          <Link to="/list/1">취소</Link>
+          <Link to={`/list/${item._id}`}>취소</Link>
         </form>
       </div>
     </>

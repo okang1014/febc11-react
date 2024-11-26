@@ -1,6 +1,39 @@
+import TodoListItem from "@pages/TodoListItem";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+// 더미 데이터, 이를 가지고 화면 구성
+const dummyData = {
+  items: [
+    {
+      _id: 1,
+      title: "잠자기",
+    },
+    {
+      _id: 2,
+      title: "자바스크립트 복습",
+      done: true,
+    },
+  ],
+};
+
 function TodoList() {
+  // 초기 상태값(데이터) 지정
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    setData(dummyData);
+  }, []);
+  // dependencies 에 빈 배열 전달 => mount 된 이후에 한 번만 호출, 업데이트 될 때 호출 X
+
+  // 목록형 데이터는 map 함수로 꺼내기
+  // data?. 데이터가 있다면, items.map()
+  // 최초에는 itemList 는 빈객체, 그 이후, 항목이 추가
+  const itemList = data?.items.map((item) => (
+    // key 값 지정 - list 요소는 필수
+    <TodoListItem key={item._id} item={item} />
+  ));
+
   return (
     <div id="main">
       <h2>할일 목록</h2>
@@ -15,26 +48,7 @@ function TodoList() {
           <input type="text" autoFocus />
           <button type="submit">검색</button>
         </form>
-        <ul className="todolist">
-          <li>
-            <span>1</span>
-            <Link to="/list/1">잠자기</Link>
-            {/* 모든 a 태그의 url 이 동일한 경우, 어떤 항목의 상세인지 확인하기 어려움, 따라서 각 항목에 대한 id 가 필요 */}
-            <Link to="/list">삭제</Link>
-          </li>
-          <li>
-            <span>2</span>
-            <Link to="/list/2">자바스크립트 복습</Link>
-            <Link to="/list">삭제</Link>
-          </li>
-          <li>
-            <span>3</span>
-            <Link to="/list/3">
-              <s>리액트 과제 하기</s>
-            </Link>
-            <Link to="/list">삭제</Link>
-          </li>
-        </ul>
+        <ul className="todolist">{itemList}</ul>
       </div>
     </div>
   );

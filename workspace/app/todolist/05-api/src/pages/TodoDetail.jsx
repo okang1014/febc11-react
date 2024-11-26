@@ -1,4 +1,5 @@
 import useAxios from "@hooks/useAxios";
+import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 
@@ -17,14 +18,28 @@ function TodoDetail() {
   const { _id } = useParams();
   console.log(_id);
 
-  // const [data, setData] = useState();
+  const [data, setData] = useState();
 
   // useEffect(() => {
   //   setData(dummyData);
   // }, []);
 
   // AxiosLibrary 사용(ch03-hooks > 09-customhooks 의 hooks 폴더 복사하여 src 에 붙여넣기)
-  const { data } = useAxios({ url: `/todolist/${_id}` }); // id 에 해당하는 상세정보 조회, 출력
+  // const { data } = useAxios({ url: `/todolist/${_id}` }); // id 에 해당하는 상세정보 조회, 출력
+
+  const axios = useAxiosInstance();
+
+  // API 서버로부터 상세정보를 조회해오는 함수 선언
+  const fetchDetail = async () => {
+    const res = await axios.get(`/todolist/${_id}`);
+    setData(res.data);
+  };
+  // fetchDetail 은 새로운 정보를 조회하여 data 를 새로운 상태값으로 지정
+
+  // 최초 마운트될 때 fetchDetail 한 번만 호출
+  useEffect(() => {
+    fetchDetail();
+  }, []);
 
   return (
     <div id="main">
@@ -41,7 +56,8 @@ function TodoDetail() {
             <Link to="./edit">수정</Link>
             <Link to="/list">목록</Link>
           </div>
-          <Outlet context={{ item: data.item }} />
+          {/* 하위 컴포넌트에게 fetchDetail 함수를 context 로 전달 */}
+          <Outlet context={{ item: data.item, refetch: fetchDetail }} />
         </>
       )}
     </div>

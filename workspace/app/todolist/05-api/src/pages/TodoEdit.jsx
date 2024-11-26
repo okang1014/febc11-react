@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 function TodoEdit() {
-  const { item } = useOutletContext();
+  const { item, refetch } = useOutletContext();
 
   const navigate = useNavigate();
 
@@ -40,7 +40,10 @@ function TodoEdit() {
 
       alert("할 일이 수정되었습니다.");
 
+      // 상세보기로 이동
       navigate(-1);
+      // refetch 를 호출하게 된다면 상태는 새롭게 호출되면 변경됨, 따라서 페이지 리렌더링 진행
+      refetch();
     } catch (err) {
       console.log(err);
       alert("할 일 수정에 실패하였습니다.");

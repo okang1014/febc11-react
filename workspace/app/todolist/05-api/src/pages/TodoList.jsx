@@ -20,23 +20,36 @@ import useAxiosInstance from "@hooks/useAxiosInstance";
 
 // fetchAPI 사용(ch03-hooks > 09-customhooks 의 hooks 폴더 복사하여 src 에 붙여넣기)
 function TodoList() {
-  // const [data, setData] = useState();
+  const [data, setData] = useState();
 
   // useEffect(() => {
   //   setData(dummyData);
   // }, []);
 
-  const { data } = useFetch({ url: "/todolist" }); // useFetch 커스텀 훅을 사용, url 을 추가한 이후, data 만 추출
+  // const { data } = useFetch({ url: "/todolist" }); // useFetch 커스텀 훅을 사용, url 을 추가한 이후, data 만 추출
 
   // axios 인스턴스
   const axios = useAxiosInstance();
 
+  // TODO 2: API 서버 요청 결과로 최초 상태 지정 함수 선언
+  const fetchList = async () => {
+    const res = await axios.get(`/todolist/`);
+    console.log(res.data);
+
+    setData(res.data);
+  };
+
+  // TODO 1: 최초 마운트 시 화면 렌더링
+  useEffect(() => {
+    fetchList();
+  }, []);
+
   // 삭제 작업
   const handleDelete = async (_id) => {
     try {
-      // TODO: 삭제
       await axios.delete(`/todolist/${_id}`);
-
+      // TODO 3: 삭제 시 화면 리렌더링 기능 추가
+      fetchList();
       alert("할 일이 삭제되었습니다.");
     } catch (err) {
       console.log(err);

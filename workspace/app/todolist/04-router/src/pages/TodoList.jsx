@@ -21,6 +21,11 @@ function TodoList() {
   // 초기 상태값(데이터) 지정
   const [data, setData] = useState();
 
+  useEffect(() => {
+    setData(dummyData);
+  }, []);
+  // dependencies 에 빈 배열 전달 => mount 된 이후에 한 번만 호출, 업데이트 될 때 호출 X
+
   // 삭제 작업
   const handleDelete = (_id) => {
     try {
@@ -34,11 +39,6 @@ function TodoList() {
       alert("할 일 수정에 실패하였습니다.");
     }
   };
-
-  useEffect(() => {
-    setData(dummyData);
-  }, []);
-  // dependencies 에 빈 배열 전달 => mount 된 이후에 한 번만 호출, 업데이트 될 때 호출 X
 
   // 목록형 데이터는 map 함수로 꺼내기
   // data?. 데이터가 있다면, items.map()

@@ -1,8 +1,9 @@
 import useAxiosInstance from "@hooks/useAxiosInstance";
-import useFetch from "@hooks/useFetch";
 import TodoListItem from "@pages/TodoListItem";
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useSearchParams } from "react-router-dom";
+import '../Pagination.css';
+import Pagination from "@components/Pagination";
 
 // const dummyData = {
 //   items: [{
@@ -25,8 +26,9 @@ function TodoList() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const params = {
-    keyword: searchParams.get('keyword'),
-    // page: searchParams.get('page'),
+    keyword: searchParams.get('keyword') || '',
+    page: searchParams.get('page') || 1,
+    limit: 5,
   };
 
   // useEffect(() => {
@@ -47,7 +49,7 @@ function TodoList() {
 
   useEffect(() => {
     fetchList();
-  }, []);
+  }, [searchParams]); // 최초 마운트 후에 호출
 
   // 삭제 작업
   const handleDelete = async (_id) => {
@@ -65,15 +67,11 @@ function TodoList() {
   };
 
   const itemList = data?.items.map(item => <TodoListItem key={ item._id } item={ item } handleDelete={ handleDelete } />);
-
-
   
   // 검색
   const handleSearch = (e) => {
     e.preventDefault();
-    const inputKeyword = searchRef.current.value;
-    console.log(inputKeyword);
-
+    setSearchParams(new URLSearchParams(`keyword=${searchRef.current.value}`));
   };
 
   return (
@@ -83,7 +81,7 @@ function TodoList() {
         <Link to="/list/add">추가</Link>
         <br/>
         <form className="search" onSubmit={ handleSearch }>
-          <input type="text" autoFocus defaultValue={'hello'} ref={ searchRef } />
+          <input type="text" autoFocus defaultValue={ params.keyword } ref={ searchRef } />
           <button type="submit">검색</button>
         </form>
         <ul className="todolist">
@@ -91,7 +89,8 @@ function TodoList() {
         </ul>
       </div>
 
-      <Outlet />
+      { data && <Pagination totalPages={ data.pagination.totalPages } current={ data.pagination.page }/> }
+
     </div>
   );
 }

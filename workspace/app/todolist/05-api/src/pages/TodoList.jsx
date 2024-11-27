@@ -3,6 +3,7 @@ import useFetch from "@hooks/useFetch";
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import useAxiosInstance from "@hooks/useAxiosInstance";
+import "../Pagination.css";
 
 // const dummyData = {
 //   items: [
@@ -32,7 +33,8 @@ function TodoList() {
     // url 에서 받은 검색 키워드를 획득하라
     keyword: searchParams.get("keyword"),
     // url 에서 받은 페이지를 획득하라
-    // page: searchParams.get('page')
+    page: searchParams.get("page") || 1, // page 가 있다면 1페이지를 줌, 그렇지 않다면 1페이지 전달
+    limit: 5, // 한 페이지 당 다섯개
   };
 
   // useEffect(() => {
@@ -90,6 +92,25 @@ function TodoList() {
     // 이 작업은 주소창에 검색한 키워드를 함께 표시해주기 위한 목적
   };
 
+  // pagination
+  // const current = params.page; // 현재 페이지를 params 로부터 획득
+  const current = data?.pagination.page; // params 에서 현재 페이지를 획득하는 것 대신 api 로부터 받은 응답을 가지고 현재 페이지를 판단하는 것이 나을 듯
+
+  let pageList = [];
+
+  // API 를 통해 page 와 현재 페이지에 보여주고자 하는 데이터 개수를 지정할 수 있음
+  for (let page = 1; page <= data?.pagination.totalPages; page++) {
+    searchParams.set("page", page); // searchParams 객체에 page 만 page 로 지정
+    // searchParams 객체를 문자열로 반환
+    let search = searchParams.toString();
+
+    pageList.push(
+      <li className={current === page ? "active" : ""} key={page}>
+        <Link to={`/list?${search}`}>{page}</Link>
+      </li>
+    );
+  }
+
   return (
     <div id="main">
       <h2>할일 목록</h2>
@@ -111,6 +132,21 @@ function TodoList() {
           <button type="submit">검색</button>
         </form>
         <ul className="todolist">{itemList}</ul>
+      </div>
+      <div className="pagination">
+        <ul>
+          {/* pageNation 기능 추가 */}
+          {/* <li className="active">
+            <Link to={`/list?page=1`}>1</Link>
+          </li>
+          <li>
+            <Link to={`/list?page=2`}>2</Link>
+          </li>
+          <li>
+            <Link to={`/list?page=3`}>3</Link>
+          </li> */}
+          {pageList}
+        </ul>
       </div>
     </div>
   );

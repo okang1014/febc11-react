@@ -1,7 +1,7 @@
 import useAxios from "@hooks/useAxios";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useEffect, useState } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 
 // const dummyData = {
 //   item: {
@@ -17,6 +17,10 @@ import { Link, Outlet, useParams } from "react-router-dom";
 function TodoDetail() {
   const { _id } = useParams();
   console.log(_id);
+
+  // 상세페이지에서 목록 선택 시 이전 페이지로 이동하도록
+  // URI 에 기존의 query string 이 있거나 또는 history back
+  const navigate = useNavigate();
 
   const [data, setData] = useState();
 
@@ -54,7 +58,10 @@ function TodoDetail() {
             <div>수정일 : {data.item.updatedAt}</div>
             {/* 가능한 절대 주소로 지정하는 것이 좋음 */}
             <Link to="./edit">수정</Link>
-            <Link to="/list">목록</Link>
+            {/* button 으로 변경 후, 클릭 시 이전 페이지로 이동 */}
+            <button type="button" onClick={() => navigate(-1)}>
+              목록
+            </button>
           </div>
           {/* 하위 컴포넌트에게 fetchDetail 함수를 context 로 전달 */}
           <Outlet context={{ item: data.item, refetch: fetchDetail }} />

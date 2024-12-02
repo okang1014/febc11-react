@@ -15,3 +15,11 @@ export default function Button({ children, type="button", bg, color, onClick: cl
   const colorStyle = classNames(styles.button, styles[`color-${bg}-${color}`]);
   return <button className={ colorStyle } type={ type } onClick={ clickHandler }>{ children }</button>
 }
+
+// function classNames(...names){
+//   let result = '';
+//   for(const name of names){
+//     result += name + ' ';
+//   }
+//   return result;
+// }

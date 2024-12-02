@@ -1,7 +1,13 @@
+// strings 배열 사이에 <strong> 태그를 씌운 values 값을 채워 넣어서 하나의 문자열로 반환한다.
 function sayHello(strings, ...values){
   console.log(strings);
   console.log(values);
-  
+  let result = '';
+  for(let i=0; i<strings.length; i++){
+    const value = values[i] ? `<strong>${values[i]}</strong>` : '';
+    result += strings[i] + value;
+  }
+  return result;
 }
 
 // sayHello(평문 문자 배열, 강조 문자 배열)

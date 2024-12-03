@@ -1,0 +1,27 @@
+/* 테일윈드 지시어 지정 */
+@tailwind base; /* html 태그의 기본 스타일이 정의된 layer */
+@tailwind components; /* 컴포넌트 스타일을 정의. 개발자가 직접 정의하여 사용(.btn, .card, .toast 등) */
+@tailwind utilities; /* 간격, 색상, 폰트 크리, 정렬 등의 유틸리티 클래스 정의, 기존 tailwind css 에서 제공하는 값 외에 디테일한 조정이 필요한 경우 사용 */
+
+/* base layer 에 설정
+Tailwind CSS 의 base, components, utilitieys 레이어 중 base 레이어의 h1 태그 재정의 */
+@layer base {
+  /* h1 컴포넌트에 모두 동일한 스타일 지정, 별도 클래스명 지정하지 않아도 됨 */
+  h1 {
+    @apply mb-6 text-2xl font-bold;
+  }
+}
+
+/* components 재정의, card 나 toast 컴포넌트의 전체 디자인 */
+@layer components {
+  .btn {
+    /* 많이 사용하는 컴포넌트 사용, 해당 태그 내에는 클래스명만 추가하면 됨 */
+    @apply bg-gray-400 text-white px-2 py-1 ml-2 text-base hover:bg-gray-600 rounded;
+  }
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-700;
+  }
+  .btn-warn {
+    @apply bg-red-500 hover:bg-red-700;
+  }
+}

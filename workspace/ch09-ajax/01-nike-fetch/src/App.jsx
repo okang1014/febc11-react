@@ -97,7 +97,7 @@ function App() {
 
   return (
     <>
-      <h1>Ch09 Ajax - 01 Nike 상품 상세 조회</h1>
+      <h1>Ch09 Ajax - 01 FetchAPI 사용 Nike 상품 상세 조회</h1>
       {/* {isLoading && <p>Loading in process</p>} */}
       {isLoading && <PulseLoader />}
       {/* 에러 발생 시 화면에 메시지 출력 */}

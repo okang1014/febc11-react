@@ -1,8 +1,8 @@
 import Shipping from "./Shipping";
 import Product from "./Product";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
-import axios from "axios";
+import useAxiosInstance from "../hooks/useAxiosInstance";
 
 function App() {
   console.log("App component render");
@@ -29,18 +29,14 @@ function App() {
   // 에러 상태, 초기 상태는 에러 없음
   const [error, setError] = useState(null);
 
+  // useAxiosInstance custom hook 을 사용한 버전
+  const axios = useAxiosInstance();
+
   // data 를 불러오는 로직
   const fetchData = async (_id) => {
     setIsLoading(true);
     try {
-      const res = await axios(
-        `https://11.fesp.shop/products/${_id}?delay=3000`,
-        {
-          headers: {
-            "client-id": "00-nike",
-          },
-        }
-      );
+      const res = await axios(`/products/${_id}`);
 
       console.log("res", res);
       // 서버 응답 정상

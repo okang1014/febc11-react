@@ -36,16 +36,20 @@ function App() {
   const fetchData = async (_id) => {
     setIsLoading(true);
     try {
-      const res = await axios(`/products/${_id}`);
+      const res = await axios.get(`/products/${_id}`);
+      // params config 객체 추가하여 instance 에 전달
+      // params 에 객체가 있다면 instance interceptor 에서 지정한 params 보다 우선
 
-      console.log("res", res);
+      // interceptor 에 의해 별도로 콘솔에서 확인 가능
+      // console.log("res", res);
+
       // 서버 응답 정상
       setData(res.data.item); // data 상태가 API 서버로부터 받아온 값으로 변경, 화면 리렌더링
       setError(null); // 서버 로딩 완료 시 에러와 데이터가 동시에 화면에 표시되는 경우가 존재, error 상태 초기화
     } catch (err) {
       // network 자체의 에러
       // axios 는 4xx, 5xx 에러도 자동으로 catch block 실행
-      console.error(err);
+      // console.error(err); // interceptor 에 의해 별도로 콘솔에서 확인 가능
       setError({ message: "잠시 후 다시 요청하셔유~" });
       setData(null);
     } finally {

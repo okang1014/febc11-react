@@ -3,6 +3,8 @@ import Product from "./Product";
 import { useCallback, useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import useAxiosInstance from "../hooks/useAxiosInstance";
+import { Slide, ToastContainer } from "react-toastify"; // toast 컴포넌트 import, slide 는 토스트 출력 방식(slide, zoom, bounce 등)
+import "react-toastify/dist/ReactToastify.css"; // toast style import
 
 function App() {
   console.log("App component render");
@@ -50,7 +52,8 @@ function App() {
       // network 자체의 에러
       // axios 는 4xx, 5xx 에러도 자동으로 catch block 실행
       // console.error(err); // interceptor 에 의해 별도로 콘솔에서 확인 가능
-      setError({ message: "잠시 후 다시 요청하셔유~" });
+      // setError({ message: "잠시 후 다시 요청하셔유~" });
+      setError(err);
       setData(null);
     } finally {
       // 성공, 실패 경우 모두 isLoading 상태를 false 로 변경
@@ -90,9 +93,9 @@ function App() {
       {/* {isLoading && <p>Loading in process</p>} */}
       {isLoading && <PulseLoader />}
       {/* 에러 발생 시 화면에 메시지 출력 */}
-      {error && (
+      {/* {error && (
         <p style={{ color: "red", fontWeight: "bold" }}>{error.message}</p>
-      )}
+      )} */}
       {/* 최초 로딩 시 data 는 undefined, 이 경우 빈 화면을 출력
       마운트된 이후에 서버로부터 데이터를 받아오고, 불러온 데이터를 가지고 상태값을 변경, 상태값이 변경된 경우 컴포넌트 리렌더링, 해당 데이터가 포함된 화면을 리렌더링 */}
       {data && (
@@ -119,6 +122,21 @@ function App() {
           <Shipping handlePayment={handlePayment} fees={shippingFees} />
         </div>
       )}
+      {/* props 로 토스트 컨테이너의 출력 방식을 지정할 수 있음, 컴포넌트에 props 로 지정할 수 있고, toast 실행하는 쪽에서도 지정할 수 있음 */}
+      <ToastContainer
+      // position="top-center"
+      // autoClose={2000}
+      // hideProgressBar={false}
+      // newestOnTop={false}
+      // closeOnClick
+      // rtl={false}
+      // pauseOnFocusLoss
+      // draggable
+      // pauseOnHover
+      // theme="light"
+      // transition={Slide}
+      />
+      {/* 화면 최하단에 토스트 컴포넌트 출력 */}
     </>
   );
 }

@@ -1,0 +1,17 @@
+a {
+  margin-inline: 10px;
+}
+
+.menu {
+  background-color: white;
+}
+
+.menu-dark {
+  background-color: grey;
+}
+
+.input-error {
+  font-size: 12px;
+  color: red;
+  font-weight: bold;
+}

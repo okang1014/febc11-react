@@ -1,9 +1,10 @@
 import useAxiosInstance from "@hooks/useAxiosInstance";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 function TodoEdit() {
-  const { item, refetch } = useOutletContext();
+  const { item } = useOutletContext();
 
   const navigate = useNavigate();
 
@@ -25,37 +26,51 @@ function TodoEdit() {
   // axios 인스턴스
   const axios = useAxiosInstance();
 
-  const onSubmit = async (formData) => {
-    try {
-      // e.preventDefault(); // handleSubmit 에 내부적으로 구현되어 있음
+  // 수정 작업 axios ver.
+  // const onSubmit = async (formData) => {
+  //   try {
+  //     await axios.patch(`/todolist/${item._id}`, formData);
+  //     // 두 번째 매개변수는 body (수정된 내용)
 
-      // useAxios({url: '/todolist', method: 'PATCH', body: {title: '', content: ''}});
-      // 커스텀 훅은 컴포넌트 가장 상위에서만 사용되어야 하며, 이벤트 핸들러 내에 직접 사용할 수 없다
-      // 조회는 페이지 로딩 시 사용 가능하지만, 등록, 수정, 삭제는 사용자의 액션이 필요하기에 단순 훅으로는 사용이 어렵다
-      // useAxios, useFetch 라이브러리는 페이지 로딩 후 데이터를 조회할 때만 사용 가능하다
+  //     alert("할 일이 수정되었습니다.");
 
-      // TODO : API 서버에 수정 요청
-      await axios.patch(`/todolist/${item._id}`, formData);
-      // 두 번째 매개변수는 body (수정된 내용)
+  //     // 상세보기로 이동
+  //     navigate(-1);
+  //     // refetch 를 호출하게 된다면 상태는 새롭게 호출되면 변경됨, 따라서 페이지 리렌더링 진행
+  //     refetch();
+  //   } catch (err) {
+  //     console.log(err);
+  //     alert("할 일 수정에 실패하였습니다.");
+  //   }
+  // };
 
+  const queryClient = useQueryClient();
+
+  // 수정 작업 React query ver.
+  const editItem = useMutation({
+    // react-hook-form 에서 수정된 데이터 검증 후 formData 로 전달
+    mutationFn: (formData) => axios.patch(`/todolist/${item._id}`, formData),
+    onSuccess: () => {
       alert("할 일이 수정되었습니다.");
-
-      // 상세보기로 이동
+      // todolist 로 시작하는 쿼리 캐시 무효화, 서버 재요청
+      // item._id 값 추가해서 해당 id 값에 대한 서버 재요청도 함께 실시
+      // invalidateQueries 에 전달된 배열에 해당하는 쿼리가 캐시 무효화, 새로고침
+      queryClient.invalidateQueries(["todolist", item._id]);
+      // 성공 시, 이전 페이지(상세페이지)로 이동
       navigate(-1);
-      // refetch 를 호출하게 된다면 상태는 새롭게 호출되면 변경됨, 따라서 페이지 리렌더링 진행
-      refetch();
-    } catch (err) {
+    },
+    onError: (err) => {
       console.log(err);
-      alert("할 일 수정에 실패하였습니다.");
-    }
-  };
+      alert("할 일 수정에 실패했습니다.");
+    },
+  });
 
   return (
     <>
       <h2>할일 수정</h2>
       <div className="todo">
         {/* handleSubmit 은 react-hook-form 에서 제공되는 메서드 */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(editItem.mutate)}>
           <label htmlFor="title">제목 :</label>
           <input
             type="text"
@@ -80,7 +95,6 @@ function TodoEdit() {
           <div className="input-error">{errors.content?.message}</div>
           <br />
           <label htmlFor="done">완료 :</label>
-          {/*  */}
           <input type="checkbox" id="done" {...register("done")} />
           <br />
           <button type="submit">수정</button>

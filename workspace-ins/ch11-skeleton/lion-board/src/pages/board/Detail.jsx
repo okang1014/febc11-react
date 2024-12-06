@@ -6,7 +6,7 @@ export default function Detail() {
 
       <section className="mb-8 p-4">
         <form action="/info">
-        <div className="font-semibold text-xl">제목 : 좋은 소식이 있습니다.</div>
+          <div className="font-semibold text-xl">제목 : 좋은 소식이 있습니다.</div>
           <div className="text-right text-gray-400">작성자 : 제이지</div>
           <div className="mb-4">
             <div>

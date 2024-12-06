@@ -1,7 +1,26 @@
 import ListItem from "@pages/board/ListItem";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosInstance from "@hooks/useAxiosInstance";
 
 export default function List() {
+  const axios = useAxiosInstance();
+
+  const { data } = useQuery({
+    queryKey: ["posts", "brunch"], // 쿼리 키(
+    queryFn: () => axios.get("/posts", { params: { type: "brunch" } }), // params 속성으로 config 추가. params 를 type=brunch 로 지정
+    select: (res) => res.data, // 반환받은 데이터 중 data 객체 추출
+    statleTime: 1000 * 10, // 캐시 시간
+  });
+
+  console.log(data);
+
+  if (!data) {
+    return <div>로딩 중...</div>;
+  }
+
+  const list = data.item.map((item) => <ListItem key={item._id} item={item} />);
+
   return (
     <main className="min-w-80 p-10">
       <div className="text-center py-4">
@@ -57,9 +76,7 @@ export default function List() {
               </th>
             </tr>
           </thead>
-          <tbody>
-            <ListItem />
-          </tbody>
+          <tbody>{list}</tbody>
         </table>
         <hr />
 

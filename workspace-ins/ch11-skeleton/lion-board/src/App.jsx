@@ -1,10 +1,10 @@
-import MainPage from "@pages/index";
+import { RouterProvider } from "react-router-dom";
+import router from '@/routes';
 
 function App() {
-
   return (
-    <MainPage />
-  )
+    <RouterProvider router={ router } />
+  );
 }
 
 export default App

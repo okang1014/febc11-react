@@ -1,5 +1,5 @@
 import ListItem from "@pages/board/ListItem";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 
@@ -7,9 +7,13 @@ export default function List() {
 
   const axios = useAxiosInstance();
 
+  // /:type
+  // localhost/info => useParams()의 리턴값 { type: info }
+  const { type } = useParams();
+
   const { data } = useQuery({
-    queryKey: ['posts', 'brunch'],
-    queryFn: () => axios.get('/posts', { params: { type: 'brunch' } }),
+    queryKey: ['posts', type],
+    queryFn: () => axios.get('/posts', { params: { type } }),
     select: res => res.data,
     staleTime: 1000*10,
   });

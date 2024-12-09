@@ -48,7 +48,8 @@ export default function List() {
         </form>
 
         <Link
-          to="/info/new"
+          to="new"
+          // 현재 url 에 new 로 이동
           className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
         >
           글작성

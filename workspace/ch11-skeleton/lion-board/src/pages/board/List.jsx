@@ -14,7 +14,7 @@ export default function List() {
     queryKey: ["posts", type],
     queryFn: () => axios.get("/posts", { params: { type } }), // params 속성으로 config 추가. params 를 type=brunch 로 지정
     select: (res) => res.data, // 반환받은 데이터 중 data 객체 추출
-    statleTime: 1000 * 10, // 캐시 시간
+    staleTime: 1000 * 10, // 캐시 시간
   });
 
   console.log(data);

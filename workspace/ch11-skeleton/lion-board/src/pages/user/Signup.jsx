@@ -37,10 +37,10 @@ export default function Signup() {
         err.response?.data.errors.forEach((error) =>
           setError(error.path, { message: error.msg })
         );
-        // setError 의 첫번째 인자 error.path 는 에러 객체 내부의 속성(field), 두 번째 인자는 message 속성에 error.msg 를 축,
+        // setError 의 첫번째 인자 error.path 는 에러 객체 내부의 속성(field), 두 번째 인자는 message 속성에 error.msg 를 추가
       } else {
         alert(
-          err.respose?.data.message || // 기타 에러
+          err.response?.data.message || // 기타 에러
             "잠시 후 다시 요청하세요." // 500 에러
         );
       }

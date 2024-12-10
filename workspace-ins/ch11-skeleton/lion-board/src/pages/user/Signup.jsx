@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import { Link } from "react-router-dom";
-
-export default function Signup() {
-=======
 import InputError from "@components/InputError";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
@@ -58,7 +53,6 @@ export default function Signup() {
     },
   });
 
->>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
   return (
     <main className="min-w-80 flex-grow flex items-center justify-center">
       <div className="p-8 border border-gray-200 rounded-lg w-full max-w-md dark:bg-gray-600 dark:border-0">
@@ -66,11 +60,7 @@ export default function Signup() {
           <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200">회원 가입</h2>
         </div>
 
-<<<<<<< HEAD
-        <form action="/">
-=======
         <form onSubmit={ handleSubmit(addUser.mutate) }>
->>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-200 mb-2" htmlFor="name">이름</label>
             <input
@@ -78,15 +68,9 @@ export default function Signup() {
               id="name"
               placeholder="이름을 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
-<<<<<<< HEAD
-              name="name"
-            />
-            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">이름은 필수입니다.</p>
-=======
               { ...register('name', { required: '이름은 필수입니다.' }) }
             />
             <InputError target={ errors.name } />
->>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-200 mb-2" htmlFor="email">이메일</label>
@@ -95,15 +79,9 @@ export default function Signup() {
               id="email"
               placeholder="이메일을 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
-<<<<<<< HEAD
-              name="email"
-            />
-            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">이메일은 필수입니다.</p>
-=======
               { ...register('email', { required: '이메일은 필수입니다.' }) }
             />
             <InputError target={ errors.email } />
->>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 dark:text-gray-200 mb-2" htmlFor="password">비밀번호</label>
@@ -112,15 +90,9 @@ export default function Signup() {
               id="password"
               placeholder="비밀번호를 입력하세요"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-orange-400 dark:bg-gray-700"
-<<<<<<< HEAD
-              name="password"
-            />
-            <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400">비밀번호는 필수입니다.</p>
-=======
               { ...register('password', { required: '비밀번호는 필수입니다.' }) }
             />
             <InputError target={ errors.password } />
->>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
           </div>
 
           <div className="mb-4">
@@ -131,11 +103,7 @@ export default function Signup() {
               accept="image/*"
               placeholder="이미지를 선택하세요"
               className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700"
-<<<<<<< HEAD
-              name="attach"
-=======
               { ...register('attach') }
->>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
             />
           </div>
 

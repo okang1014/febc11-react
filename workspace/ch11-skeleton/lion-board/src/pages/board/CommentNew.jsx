@@ -7,15 +7,15 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function CommentNew() {
   const axios = useAxiosInstance();
 
-  const { type, _id } = useParams();
+  const { _id } = useParams();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // 동일한 페이지 내 이동은 navigate 불필요
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    reset, // input field 초기화 함수
   } = useForm({
     defaultValues: {
       content: "",
@@ -27,11 +27,13 @@ export default function CommentNew() {
   const addComment = useMutation({
     mutationFn: (formData) => axios.post(`/posts/${_id}/replies`, formData),
     onSuccess: () => {
-      alert("댓글이 등록되었습니다.");
+      // alert("댓글이 등록되었습니다."); // alert 생략
       queryClient.invalidateQueries({
-        queryKey: ["posts", type, _id, "replies"],
+        // 상세 조회 데이터를 하위 컴포넌트에 props 로 넘겨주고 댓글 목록을 출력한다면, 상세 조회의 queryKey 를 무효화해야함
+        queryKey: ["posts", _id],
+        // queryKey: ["replies", _id], // 댓글 등록 이후 곧바로 데이터 fetch 하지 않음
       });
-      navigate(`/${type}/${_id}`);
+      // navigate(`/${type}/${_id}`); // 현재 페이지, 동일한 페이지에서 이동하는 것이기 때문에 불필요
       // react-hook-form 에서 input field 초기화하는 함수 reset()
       reset();
     },
@@ -51,8 +53,8 @@ export default function CommentNew() {
             className="block p-2 w-full text-sm border rounded-lg border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             placeholder="내용을 입력하세요."
             {...register("content", { required: "내용은 필수입니다." })}
-          ></textarea>
-          <InputError target={errors.title} />
+          />
+          <InputError target={errors.content} />
         </div>
         <button
           type="submit"

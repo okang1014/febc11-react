@@ -28,7 +28,9 @@ export default function CommentNew() {
     mutationFn: (formData) => axios.post(`/posts/${_id}/replies`, formData),
     onSuccess: () => {
       alert("댓글이 등록되었습니다.");
-      queryClient.invalidateQueries(["posts", type, _id, "replies"]);
+      queryClient.invalidateQueries({
+        queryKey: ["posts", type, _id, "replies"],
+      });
       navigate(`/${type}/${_id}`);
       // react-hook-form 에서 input field 초기화하는 함수 reset()
       reset();

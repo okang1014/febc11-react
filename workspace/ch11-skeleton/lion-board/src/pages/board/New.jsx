@@ -36,7 +36,7 @@ export default function New() {
       alert("새로운 게시물이 등록되었습니다.");
       // 글 작성 완료 직후 다시 리스트 화면으로 돌아갈 때, 즉각 반영이 되지 않는 이유는 캐시된 결과를 우선적으로 화면에 출력하기 때문
       // 따라서 캐시된 쿼리를 무효화하여 곧바로 서버 재요청, 새로운 데이터 불러와서 출력
-      queryClient.invalidateQueries(["posts", type]);
+      queryClient.invalidateQueries({ queryKey: ["posts", type] });
       navigate(`/${type}`); // 작성한 게시판 페이지로 이동, 현 url 을 절대경로로 변경
     },
     onError: (err) => {

@@ -55,7 +55,7 @@ function TodoEdit() {
       // todolist 로 시작하는 쿼리 캐시 무효화, 서버 재요청
       // item._id 값 추가해서 해당 id 값에 대한 서버 재요청도 함께 실시
       // invalidateQueries 에 전달된 배열에 해당하는 쿼리가 캐시 무효화, 새로고침
-      queryClient.invalidateQueries(["todolist", item._id]);
+      queryClient.invalidateQueries({ queryKey: ["todolist", item._id] });
       // 성공 시, 이전 페이지(상세페이지)로 이동
       navigate(-1);
     },

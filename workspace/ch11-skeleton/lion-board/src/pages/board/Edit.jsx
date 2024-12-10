@@ -41,7 +41,7 @@ export default function Edit() {
     mutationFn: (formData) => axios.patch(`/posts/${_id}`, formData),
     onSuccess: () => {
       alert("게시물이 수정되었습니다.");
-      queryClient.invalidateQueries(["posts", _id]); // 상세보기에서 캐시된 값을 새로고침
+      queryClient.invalidateQueries({ queryKey: ["posts", _id] }); // 상세보기에서 캐시된 값을 새로고침
       navigate(`/${type}/${_id}`); // 특정 게시물 타입의 id 에 해당하는 상세페이지로 이동
     },
     onError: (err) => {

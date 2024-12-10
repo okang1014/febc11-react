@@ -27,7 +27,7 @@ function TodoAdd() {
       alert("할 일이 추가되었습니다.");
       reset();
       // 지정한 키의 쿼리 캐시를 무효화
-      queryClient.invalidateQueries(["todolist"]);
+      queryClient.invalidateQueries({ queryKey: ["todolist"] });
       // todolist 로 시작되는 쿼리값은 fresh, stale 상태 상관없이 캐시 초기화
       // 할 일을 추가한 이후, 이전 페이지로 이동할 때, 즉각적으로 데이터를 불러오도록 캐시를 초기화, 서버 재요청, 리렌더링 진행
       // 할 일 목록 페이지로 이동(이전 페이지로 이동)

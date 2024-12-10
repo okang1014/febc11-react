@@ -19,6 +19,7 @@ export default function Signup() {
   const addUser = useMutation({
     mutationFn: async (userInfo) => {
       // 이미지 파일을 우선 서버에 전달
+      // 이미지가 있는 경우, userInfo 폼 데이터에 추가하는 작업
       if (userInfo.attach.length > 0) {
         // 새로운 폼 데이터 객체를 생성
         const imageFormData = new FormData();
@@ -27,7 +28,7 @@ export default function Signup() {
 
         // 파일 업로드 요청
         const fileRes = await axios(`/files`, {
-          // method 는 별도로 지정해야함 - useAxiosInstance 를 사용하는 경우, 두 번째 매개변수가 body 에 추가되어 전달됨
+          // method 는 별도로 지정해야함 - 왜냐하면 useAxiosInstance 를 사용하는 경우, 두 번째 매개변수가 body 에 추가되어 전달됨
           method: "post",
           headers: {
             // 파일 업로드 시 필요한 설정

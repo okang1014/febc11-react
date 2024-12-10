@@ -42,7 +42,11 @@ export default function List() {
           <button type="submit" className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded">검색</button>
         </form>
 
+<<<<<<< HEAD
         <Link to="/info/new" className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded">글작성</Link>
+=======
+        <Link to="new" className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded">글작성</Link>
+>>>>>>> b2c9403fa9cef9b4f17a294222cf4f529bc7bb22
       </div>
       <section className="pt-10">
         <table className="border-collapse w-full table-fixed">

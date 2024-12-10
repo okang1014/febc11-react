@@ -1,9 +1,13 @@
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import CommentList from "@pages/board/CommentList";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useUserStore from "@zustand/userStore";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function Detail() {
+  // store 로부터 User 상태 획득
+  // 전체 객체를 받기 때문에 User 는 구조분해할당으로 추출
+  const { user } = useUserStore();
   const navigate = useNavigate();
   const axios = useAxiosInstance();
 
@@ -67,19 +71,26 @@ export default function Detail() {
             >
               목록
             </Link>
-            <Link
-              to={`/${type}/${_id}/edit`}
-              className="bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-            >
-              수정
-            </Link>
-            {/* button type 이 submit 인 경우, form 에 onSubmit 이벤트 등록, button type 이 button 인 경우, button 에 onClick 이벤트 등록 */}
-            <button
-              type="submit"
-              className="bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-            >
-              삭제
-            </button>
+
+            {/* 상태에 저장된 User 의 id 와 게시글 조회시 불러온 데이터의 id 정보가 일치하는 경우에만 표시 */}
+            {/* 즉 사용자 본인에게만 보이는 영역 */}
+            {user?._id === data.item.user._id && (
+              <>
+                <Link
+                  to={`/${type}/${_id}/edit`}
+                  className="bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+                >
+                  수정
+                </Link>
+                <button
+                  // button type 이 submit 인 경우, form 에 onSubmit 이벤트 등록, button type 이 button 인 경우, button 에 onClick 이벤트 등록
+                  type="submit"
+                  className="bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+                >
+                  삭제
+                </button>
+              </>
+            )}
           </div>
         </form>
       </section>

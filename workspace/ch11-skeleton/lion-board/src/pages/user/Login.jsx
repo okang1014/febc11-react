@@ -1,10 +1,16 @@
 import InputError from "@components/InputError";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
+import useUserStore from "@zustand/userStore";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  // 로그인 상태를 변경하는 함수를 useUserStore 로부터 획득
+  // 스토어로부터 setUser 함수만 추출, 구조분해할당 불필요
+  // 필요한 부분만 추출하여 상태에 따른 리렌더링을 방지
+  const setUser = useUserStore((store) => store.setUser);
+
   const navigate = useNavigate();
 
   const {
@@ -20,6 +26,17 @@ export default function Login() {
     mutationFn: (formData) => axios.post(`/users/login`, formData),
     onSuccess: (res) => {
       console.log(res);
+
+      const user = res.data.item;
+      // 필요한 회원정보를 서버 응답 데이터에서 추출한 이후, 상태에 저장
+      setUser({
+        _id: user._id,
+        name: user.name,
+        profile: user.image?.path,
+        accessToken: user.token.accessToken,
+        refreshToken: user.token.refreshToken,
+      });
+
       alert(res.data.item.name + "님, 로그인되었습니다.");
       navigate(`/`);
     },

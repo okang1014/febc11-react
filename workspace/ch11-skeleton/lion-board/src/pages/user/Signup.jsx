@@ -17,14 +17,43 @@ export default function Signup() {
   const axios = useAxiosInstance();
 
   const addUser = useMutation({
-    mutationFn: (formData) => {
-      const body = {
-        type: "user",
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      };
-      return axios.post(`/users`, body);
+    mutationFn: async (userInfo) => {
+      // 이미지 파일을 우선 서버에 전달
+      if (userInfo.attach.length > 0) {
+        // 새로운 폼 데이터 객체를 생성
+        const imageFormData = new FormData();
+        // 리액트 훅 폼에 의해 생성된 formData.attach 의 첫번째 항목을 imageFormData 에 attach 라는 속성값으로 append(추가) 후 서버 전송
+        imageFormData.append("attach", userInfo.attach[0]);
+
+        // 파일 업로드 요청
+        const fileRes = await axios(`/files`, {
+          // method 는 별도로 지정해야함 - useAxiosInstance 를 사용하는 경우, 두 번째 매개변수가 body 에 추가되어 전달됨
+          method: "post",
+          headers: {
+            // 파일 업로드 시 필요한 설정
+            "Content-Type": "multipart/form-data", // 기존에는 application/json, 이미지는 바이너리 형태(파일)의 데이터를 전송
+          },
+          data: imageFormData, // 이미지 파일이 첨부된 폼 데이터
+        });
+
+        userInfo.image = fileRes.data.item[0]; // userInfo(react-hook-form 에 의해 전달받은 사용자 입력 폼 데이터)
+        delete userInfo.attach; // 파일을 우선 서버에 전송, userInfo(사용자 입력 폼) 내부의 attach 속성은 삭제
+      }
+
+      userInfo.type = "user";
+
+      // userInfo 객체(사용자 입력 폼데이터)는 아래의 정보를 담고 있는 객체
+      // const body = {
+      //   type: "user",
+      //   name: userInfo.name,
+      //   email: userInfo.email,
+      //   password: userInfo.password,
+      //   image: userInfo.image,
+      // };
+
+      console.log(userInfo);
+
+      return axios.post(`/users`, userInfo);
     },
     onSuccess: () => {
       alert("회원가입이 완료되었습니다.");

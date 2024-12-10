@@ -1,9 +1,10 @@
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import CommentList from "@pages/board/CommentList";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function Detail() {
+  const navigate = useNavigate();
   const axios = useAxiosInstance();
 
   // /:type
@@ -21,13 +22,32 @@ export default function Detail() {
 
   console.log(data);
 
+  const queryClient = useQueryClient();
+
+  // 게시물 삭제 기능
+  const removeItem = useMutation({
+    mutationFn: (_id) => axios.delete(`/posts/${_id}`),
+    onSuccess: () => {
+      alert("게시물이 삭제되었습니다.");
+      queryClient.invalidateQueries({ queryKey: ["posts", type] });
+      navigate(`/${type}`); // 작성한 게시판 페이지로 이동, 현 url 을 절대경로로 변경
+    },
+    // axios 에 에러 콘솔 출력 기능 존재하기 때문에 onError 생략
+  });
+
+  // react-hook-form 을 사용하지 않기 때문에 이벤트 핸들러로 등록
+  const onSubmit = (event) => {
+    event.preventDefault();
+    removeItem.mutate(_id);
+  };
+
   if (!data) {
     return <div>로딩 중...</div>;
   }
   return (
     <main className="container mx-auto mt-4 px-4">
       <section className="mb-8 p-4">
-        <form action="/info">
+        <form onSubmit={onSubmit}>
           <div className="font-semibold text-xl">제목 : {data.item.title}</div>
           <div className="text-right text-gray-400">
             작성자 : {data.item.user.name}
@@ -53,6 +73,7 @@ export default function Detail() {
             >
               수정
             </Link>
+            {/* button type 이 submit 인 경우, form 에 onSubmit 이벤트 등록, button type 이 button 인 경우, button 에 onClick 이벤트 등록 */}
             <button
               type="submit"
               className="bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"

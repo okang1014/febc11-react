@@ -24,7 +24,15 @@ export default function CommentListItem({ item }) {
 
   // 댓글 삭제 기능
   const removeItem = useMutation({
-    mutationFn: () => axios.delete(`/posts/${_id}/replies/${item._id}`),
+    // ❓mutationFn 에 매개변수를 지정하지 않아도 되는 이유 - 컴포넌트 내부에 이미 mutationFn 에 사용되는 값이 정의되어 있기 때문에 매개변수를 전달하지 않아도 전달한 것처럼 작동
+    // 그렇다면 왜 인자를 지정해주어야 하는가?
+    // mutationFn 의 독립성 그리고 일부의 순수성을 확보하기 위함
+    // 1. 인자를 지정하지 않는 경우, 함수는 외부의 요인에 의해 영향을 받게됨. - 만일 item 이나 _id 식별자가 변경되는 경우, 함수도 수정을 해주어야함. 유지보수성 저하
+    // mutationFn: () => axios.delete(`/posts/${_id}/replies/${item._id}`),
+    // 2. 인자를 지정하는 경우, 해당 함수에 대입되는 값은 함수를 호출하는 쪽에서 지정, 따라서 함수 자체를 수정할 필요가 없어짐
+    // 그리고 해당 함수는 컴포넌트 내부 요인에 영향을 받지 않기 때문에 컴포넌트 외부에 선언할 수 있고, 따라서 해당 로직이 필요한 컴포넌트에서도 사용할 수 있게 됨
+    mutationFn: (_id, item_id) =>
+      axios.delete(`/posts/${_id}/replies/${item_id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts", _id] });
     },
@@ -60,7 +68,7 @@ export default function CommentListItem({ item }) {
           type="submit"
           className="bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded"
           onClick={() => {
-            removeItem.mutate();
+            removeItem.mutate(_id, item._id);
           }}
         >
           삭제

@@ -1,5 +1,6 @@
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useUserStore from "@zustand/userStore";
 import PropTypes from "prop-types";
 import { Link, useParams } from "react-router-dom";
 
@@ -7,6 +8,7 @@ CommentListItem.propTypes = {
   item: PropTypes.shape({
     _id: PropTypes.number.isRequired,
     user: PropTypes.shape({
+      _id: PropTypes.number,
       name: PropTypes.string,
       image: PropTypes.shape({
         path: PropTypes.string,
@@ -18,6 +20,8 @@ CommentListItem.propTypes = {
 };
 
 export default function CommentListItem({ item }) {
+  const { user } = useUserStore();
+
   const axios = useAxiosInstance();
   const queryClient = useQueryClient();
   const { _id } = useParams();
@@ -31,8 +35,7 @@ export default function CommentListItem({ item }) {
     // mutationFn: () => axios.delete(`/posts/${_id}/replies/${item._id}`),
     // 2. 인자를 지정하는 경우, 해당 함수에 대입되는 값은 함수를 호출하는 쪽에서 지정, 따라서 함수 자체를 수정할 필요가 없어짐
     // 그리고 해당 함수는 컴포넌트 내부 요인에 영향을 받지 않기 때문에 컴포넌트 외부에 선언할 수 있고, 따라서 해당 로직이 필요한 컴포넌트에서도 사용할 수 있게 됨
-    mutationFn: (_id, item_id) =>
-      axios.delete(`/posts/${_id}/replies/${item_id}`),
+    mutationFn: () => axios.delete(`/posts/${_id}/replies/${item._id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts", _id] });
     },
@@ -64,15 +67,19 @@ export default function CommentListItem({ item }) {
       </div>
       <div className="flex justify-between items-center mb-2">
         <pre className="whitespace-pre-wrap text-sm">{item.content}</pre>
-        <button
-          type="submit"
-          className="bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-          onClick={() => {
-            removeItem.mutate(_id, item._id);
-          }}
-        >
-          삭제
-        </button>
+
+        {/* 로그인한 사용자 아이디와 댓글을 작성한 사용자의 _id 가 일치하는 경우에만 댓글 항목에 삭제 버튼 표시 */}
+        {user?._id === item.user._id && (
+          <button
+            type="submit"
+            className="bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+            onClick={() => {
+              removeItem.mutate(_id, item._id);
+            }}
+          >
+            삭제
+          </button>
+        )}
       </div>
     </div>
   );

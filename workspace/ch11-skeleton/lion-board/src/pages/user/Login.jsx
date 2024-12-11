@@ -18,7 +18,10 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm();
+  } = useForm({
+    // 로그인 기본값 세팅
+    defaultValues: { email: "jihoon2@test.com", password: "11111111" },
+  });
 
   const axios = useAxiosInstance();
 

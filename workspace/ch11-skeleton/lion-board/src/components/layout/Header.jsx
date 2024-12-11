@@ -3,6 +3,13 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   const { user, resetUser } = useUserStore();
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    // resetUser 함수 호출 - user 상태를 null 로 초기화
+    resetUser();
+  };
+
   return (
     <>
       <header className="px-8 min-w-80 bg-slate-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 transition-color duration-500 ease-in-out">
@@ -36,7 +43,7 @@ export default function Header() {
           <div className="w-1/2 order-1 flex justify-end items-center md:order-2 md:w-auto">
             {/* 삼항연산자로 user 상태가 있는 경우 보여줄 UI 와 없는 경우 보여줄 UI 지정 */}
             {user ? (
-              <form action="/">
+              <form onSubmit={handleLogout}>
                 <p className="flex items-center">
                   {/* 사용자 프로필 이미지가 있는 경우에 이미지 출력 조건부 렌더링 */}
                   {user.profile && (

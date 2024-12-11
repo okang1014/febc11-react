@@ -21,12 +21,13 @@ const UserStore = (set) => ({
 
 // persist - 영구적인 스토리지 사용
 // persist 함수에 의해 해당 데이터(사용자 정보)를 스토리지에 저장
-// persist 함수의 첫번째 인자로 함수, 두번째 인자로 함수 전달
-const useUserStore = create(persist(UserStore), {
+// persist 함수의 첫번째 인자로 함수, 두번째 인자로 함수 전달 - 함수 외부에 전달하는 경우, 별도 값 지정하지 않은 것으로 작동하여 localStorage 에 저장
+const useUserStore = create(persist(UserStore, {
+  // option 은 persist 함수 내에 인자로 추가
   name: 'user', // user 라는 이름으로 저장
   storage: createJSONStorage(() => sessionStorage),
   // 데이터를 어디에 저장할 것인지? default 는 localStorage
-});
+}));
 
 
 

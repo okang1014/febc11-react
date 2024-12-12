@@ -2,6 +2,7 @@ import useAxiosInstance from "@hooks/useAxiosInstance";
 import CommentList from "@pages/board/CommentList";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useUserStore from "@zustand/userStore";
+import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function Detail() {
@@ -49,53 +50,66 @@ export default function Detail() {
     return <div>로딩 중...</div>;
   }
   return (
-    <main className="container mx-auto mt-4 px-4">
-      <section className="mb-8 p-4">
-        <form onSubmit={onSubmit}>
-          <div className="font-semibold text-xl">제목 : {data.item.title}</div>
-          <div className="text-right text-gray-400">
-            작성자 : {data.item.user.name}
-          </div>
-          <div className="mb-4">
-            <div>
-              <pre className="font-roboto w-full p-2 whitespace-pre-wrap">
-                {data.item.content}
-              </pre>
+    <>
+      {/* head 의 메타 태그를 수정하는 라이브러리
+      컴포넌트는 body 에 추가되지만 Helmet 부분은 head 부분 수정 */}
+      {/* helmet 을 사용하기 위해서는 상위 컴포넌트에 propvider 추가 필수 */}
+      <Helmet>
+        <title>{data.item.title} - 멋사컴</title>
+
+        <meta property="og:title" content={data.item.title} />
+        <meta property="og:description" content={data.item.content} />
+      </Helmet>
+      <main className="container mx-auto mt-4 px-4">
+        <section className="mb-8 p-4">
+          <form onSubmit={onSubmit}>
+            <div className="font-semibold text-xl">
+              제목 : {data.item.title}
             </div>
-            <hr />
-          </div>
-          <div className="flex justify-end my-4">
-            <Link
-              to={`/${type}`}
-              className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-            >
-              목록
-            </Link>
+            <div className="text-right text-gray-400">
+              작성자 : {data.item.user.name}
+            </div>
+            <div className="mb-4">
+              <div>
+                <pre className="font-roboto w-full p-2 whitespace-pre-wrap">
+                  {data.item.content}
+                </pre>
+              </div>
+              <hr />
+            </div>
+            <div className="flex justify-end my-4">
+              <Link
+                to={`/${type}`}
+                className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+              >
+                목록
+              </Link>
 
-            {/* 상태에 저장된 User 의 id 와 게시글 조회시 불러온 데이터의 id 정보가 일치하는 경우에만 표시 */}
-            {/* 즉 사용자 본인에게만 보이는 영역 */}
-            {user?._id === data.item.user._id && (
-              <>
-                <Link
-                  to={`/${type}/${_id}/edit`}
-                  className="bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-                >
-                  수정
-                </Link>
-                <button
-                  // button type 이 submit 인 경우, form 에 onSubmit 이벤트 등록, button type 이 button 인 경우, button 에 onClick 이벤트 등록
-                  type="submit"
-                  className="bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-                >
-                  삭제
-                </button>
-              </>
-            )}
-          </div>
-        </form>
-      </section>
+              {/* 상태에 저장된 User 의 id 와 게시글 조회시 불러온 데이터의 id 정보가 일치하는 경우에만 표시 */}
+              {/* 즉 사용자 본인에게만 보이는 영역 */}
+              {user?._id === data.item.user._id && (
+                <>
+                  <Link
+                    to={`/${type}/${_id}/edit`}
+                    className="bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+                  >
+                    수정
+                  </Link>
+                  <button
+                    // button type 이 submit 인 경우, form 에 onSubmit 이벤트 등록, button type 이 button 인 경우, button 에 onClick 이벤트 등록
+                    type="submit"
+                    className="bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+                  >
+                    삭제
+                  </button>
+                </>
+              )}
+            </div>
+          </form>
+        </section>
 
-      <CommentList replies={data.item.replies} />
-    </main>
+        <CommentList replies={data.item.replies} />
+      </main>
+    </>
   );
 }

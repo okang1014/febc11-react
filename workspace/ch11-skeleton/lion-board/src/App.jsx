@@ -1,6 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import router from "@/routes";
 import useThemeStore from "@zustand/themeStore";
+import { HelmetProvider } from "react-helmet-async";
 
 function App() {
   const { isDarkMode } = useThemeStore();
@@ -15,7 +16,9 @@ function App() {
   }
   // routes.jsx 파일에서 설정한 경로대로 화면을 표시해주는 역할
   return (
-    <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    <HelmetProvider>
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
+    </HelmetProvider>
   );
 }
 

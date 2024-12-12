@@ -1,13 +1,26 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import Layout from "@components/layout";
-import MainPage from "@pages/index";
-import List from "@pages/board/List";
-import New from "@pages/board/New";
-import Detail from "@pages/board/Detail";
-import Edit from "@pages/board/Edit";
-import Signup from "@pages/user/Signup";
-import Login from "@pages/user/Login";
+// lazy ver. - 분리된 파일 생성, 컴포넌트가 사용자에 의해 사용될 때 로딩
+const Layout = lazy(() => import("@components/layout"));
+const Detail = lazy(() => import("@pages/board/Detail"));
+const Edit = lazy(() => import("@pages/board/Edit"));
+const List = lazy(() => import("@pages/board/List"));
+const New = lazy(() => import("@pages/board/New"));
+// const ErrorPage = lazy(() => import("@pages/ErrorPage"));
+const MainPage = lazy(() => import("@pages/index"));
+const Login = lazy(() => import("@pages/user/Login"));
+const Signup = lazy(() => import("@pages/user/Signup"));
+
+// 정적 import - bundling 과정에서 하나의 js 파일 생성, 용량이 크기에 첫 로딩이 느릴 수 있음
+// import Layout from "@components/layout";
+// import MainPage from "@pages/index";
+// import List from "@pages/board/List";
+// import New from "@pages/board/New";
+// import Detail from "@pages/board/Detail";
+// import Edit from "@pages/board/Edit";
+// import Signup from "@pages/user/Signup";
+// import Login from "@pages/user/Login";
 
 const router = createBrowserRouter(
   [

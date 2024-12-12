@@ -3,13 +3,15 @@ import useAxiosInstance from "@hooks/useAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import useUserStore from "@zustand/userStore";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   // 로그인 상태를 변경하는 함수를 useUserStore 로부터 획득
   // 스토어로부터 setUser 함수만 추출, 구조분해할당 불필요
   // 필요한 부분만 추출하여 상태에 따른 리렌더링을 방지
   const setUser = useUserStore((store) => store.setUser);
+
+  const location = useLocation();
 
   const navigate = useNavigate();
 
@@ -40,8 +42,11 @@ export default function Login() {
         refreshToken: user.token.refreshToken,
       });
 
+      console.log(location);
+
       alert(res.data.item.name + "님, 로그인되었습니다.");
-      navigate(`/`);
+      // navigate(`/`); // 메인 페이지로 이동
+      navigate(location.state?.from || `/`); // location 의 state 값이 있는 경우, state 객체 내부에 있는 경로로 이동, 없으면 메인으로 이동
     },
     onError: (err) => {
       console.error(err);

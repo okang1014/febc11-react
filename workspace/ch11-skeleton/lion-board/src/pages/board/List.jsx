@@ -2,9 +2,11 @@ import ListItem from "@pages/board/ListItem";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosInstance from "@hooks/useAxiosInstance";
+import useUserStore from "@zustand/userStore";
 
 export default function List() {
   const axios = useAxiosInstance();
+  const { user } = useUserStore();
 
   // /:type
   // localhost/info => useParams() 의 리턴값 {type: info}
@@ -47,13 +49,18 @@ export default function List() {
           </button>
         </form>
 
-        <Link
-          to="new"
-          // 현재 url 에 new 로 이동
-          className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-        >
-          글작성
-        </Link>
+        {/* 조건부 렌더링, 로그인 사용자만 글 작성 가능 
+        완벽하게 로그인 하지 않은 사용자 글쓰기 접속을 막은 것은 아님
+        직접 링크를 접속하게 된다면 글쓰기 페이지 이동 가능 */}
+        {user && (
+          <Link
+            to="new"
+            // 현재 url 에 new 로 이동
+            className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+          >
+            글작성
+          </Link>
+        )}
       </div>
       <section className="pt-10">
         <table className="border-collapse w-full table-fixed">

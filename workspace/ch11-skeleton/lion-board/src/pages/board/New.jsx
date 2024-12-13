@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import InputError from "@components/InputError";
+import { Helmet } from "react-helmet-async";
 
 export default function New() {
   // useNavigate 훅을 사용해서 특정 페이지로 이동
@@ -45,64 +46,75 @@ export default function New() {
   });
 
   return (
-    <main className="min-w-[320px] p-4">
-      <div className="text-center py-4">
-        <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200">
-          게시글 등록
-        </h2>
-      </div>
-      <section className="mb-8 p-4">
-        <form onSubmit={handleSubmit(addItem.mutate)}>
-          <div className="my-4">
-            <label className="block text-lg content-center" htmlFor="title">
-              제목
-            </label>
-            <input
-              id="title"
-              type="text"
-              placeholder="제목을 입력하세요."
-              className="w-full py-2 px-4 border rounded-md dark:bg-gray-700 border-gray-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-              // input 요소의 이름과 입력 조건값(객체)을 register 함수에 전달
-              // register 함수는 name 값을 갖는 객체를 반환
-              {...register("title", { required: "제목은 필수입니다." })}
-            />
-            {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400"> */}
-            {/* title 의 에러 메시지가 있는 경우 출력, 없는 경우, undefined 로 출력 X, 
+    <>
+      <Helmet>
+        <title>게시글 등록 - 멋사컴</title>
+
+        <meta property="og:title" content="게시글 등록 - 멋사컴" />
+        <meta
+          property="og:description"
+          content="나만 알 수 없는 코딩 정보를 공유하세요."
+        />
+      </Helmet>
+      <main className="min-w-[320px] p-4">
+        <div className="text-center py-4">
+          <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200">
+            게시글 등록
+          </h2>
+        </div>
+        <section className="mb-8 p-4">
+          <form onSubmit={handleSubmit(addItem.mutate)}>
+            <div className="my-4">
+              <label className="block text-lg content-center" htmlFor="title">
+                제목
+              </label>
+              <input
+                id="title"
+                type="text"
+                placeholder="제목을 입력하세요."
+                className="w-full py-2 px-4 border rounded-md dark:bg-gray-700 border-gray-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                // input 요소의 이름과 입력 조건값(객체)을 register 함수에 전달
+                // register 함수는 name 값을 갖는 객체를 반환
+                {...register("title", { required: "제목은 필수입니다." })}
+              />
+              {/* <p className="ml-2 mt-1 text-sm text-red-500 dark:text-red-400"> */}
+              {/* title 의 에러 메시지가 있는 경우 출력, 없는 경우, undefined 로 출력 X, 
               handleSubmit 함수가 입력값 검증 후 에러 추가, 에러 상태 변경 */}
-            {/* {errors.title?.message} */}
-            {/* </p> */}
-            <InputError target={errors.title} />
-          </div>
-          <div className="my-4">
-            <label className="block text-lg content-center" htmlFor="content">
-              내용
-            </label>
-            <textarea
-              id="content"
-              rows="15"
-              placeholder="내용을 입력하세요."
-              className="w-full p-4 text-sm border rounded-lg border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-              {...register("content", { required: "내용은 필수입니다." })}
-            ></textarea>
-            <InputError target={errors.content} />
-          </div>
-          <hr />
-          <div className="flex justify-end my-6">
-            <button
-              type="submit"
-              className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-            >
-              등록
-            </button>
-            <Link
-              to="/info"
-              className="bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
-            >
-              취소
-            </Link>
-          </div>
-        </form>
-      </section>
-    </main>
+              {/* {errors.title?.message} */}
+              {/* </p> */}
+              <InputError target={errors.title} />
+            </div>
+            <div className="my-4">
+              <label className="block text-lg content-center" htmlFor="content">
+                내용
+              </label>
+              <textarea
+                id="content"
+                rows="15"
+                placeholder="내용을 입력하세요."
+                className="w-full p-4 text-sm border rounded-lg border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                {...register("content", { required: "내용은 필수입니다." })}
+              ></textarea>
+              <InputError target={errors.content} />
+            </div>
+            <hr />
+            <div className="flex justify-end my-6">
+              <button
+                type="submit"
+                className="bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+              >
+                등록
+              </button>
+              <Link
+                to="/info"
+                className="bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded"
+              >
+                취소
+              </Link>
+            </div>
+          </form>
+        </section>
+      </main>
+    </>
   );
 }

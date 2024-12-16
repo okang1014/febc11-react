@@ -1,24 +1,36 @@
-// 게시물 목록 조회 페이지
-
 import Link from "next/link";
 
-export default function Page() {
+// 게시글 상세 조회
+async function fetchPost(_id) {
+  const url = `https://11.fesp.shop/posts/${_id}`;
+
+  const res = await fetch(url, {
+    headers: { "client-id": "00-board" },
+  });
+  return await res.json();
+}
+
+export default async function Page({ params }) {
+  // url 에서 _id 획득
+  const { _id } = await params;
+
+  // _id 에 해당하는 게시글 상세 정보 조회
+  const data = await fetchPost(_id);
+
+  console.log(data);
+
   return (
     <main className="container mx-auto mt-4 px-4">
       <section className="mb-8 p-4">
         <form action="/info">
-          <div className="font-semibold text-xl">
-            제목 : 좋은 소식이 있습니다.
+          <div className="font-semibold text-xl">제목 : {data.item.title}</div>
+          <div className="text-right text-gray-400">
+            작성자 : {data.item.user.name}
           </div>
-          <div className="text-right text-gray-400">작성자 : 제이지</div>
           <div className="mb-4">
             <div>
               <pre className="font-roboto w-full p-2 whitespace-pre-wrap">
-                좋은 소식을 가지고 왔습니다.
-                <br />
-                오늘 드디어 최종 면접을 합니다.
-                <br />
-                많이 응원해 주세요^^
+                {data.item.content}
               </pre>
             </div>
             <hr />

@@ -7,7 +7,7 @@ export default function ListItem({ item }) {
       <td className="p-2 truncate indent-4">
         {/* React 는 Link 컴포넌트 url 은 to 속성으로 지정 */}
         {/* Next.js 에서는 Link 컴포넌트 url 은 href 로 링크 지정 */}
-        <Link href={`/${item.type}/${item._id}}`} className="cursor-pointer">
+        <Link href={`/${item.type}/${item._id}`} className="cursor-pointer">
           {item.title}
         </Link>
       </td>

@@ -1,8 +1,10 @@
 // 게시물 목록 조회 페이지
 
+import { addPost } from "@/actions/postAction";
 import Link from "next/link";
 
-export default function Page() {
+export default async function Page({ params }) {
+  const { type } = await params;
   return (
     <main className="min-w-[320px] p-4">
       <div className="text-center py-4">
@@ -11,7 +13,12 @@ export default function Page() {
         </h2>
       </div>
       <section className="mb-8 p-4">
-        <form action="/info/1">
+        {/* 원래 action 은 url 로 이동 및 전달, 하지만 next.js 에서는 함수를 지정 */}
+        {/* submit 이벤트가 발생하면 addPost 를 호출 */}
+        <form action={addPost}>
+          {/* hidden 입력 값으로 타입을 자동으로 지정 가능 */}
+          {/* hidden 속성은 사용자에게 표시할 필요 없는 input 이지만 서버에는 form 으로 전송할 필요가 있는 데이터를 처리할 수 있는 방식이다. */}
+          <input type="hidden" name="type" value={type} />
           <div className="my-4">
             <label className="block text-lg content-center" htmlFor="title">
               제목

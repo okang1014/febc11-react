@@ -1,13 +1,24 @@
-// 게시물 목록 조회 페이지
+// 동적 라우팅 설정 시, 해당 폴더를 [동적 라우팅 명(변수명)] 으로 지정하면 Next.js 에 의해 자동으로 라우팅 설정
+// 자료 구조가 결국 라우팅 경로가 됨, 따라서 더더욱 자료 구조 관리가 중요
 
 import Link from "next/link";
 
-export default function Page() {
+// react-router-dom 에서는 useParams 로 해당 url 중 list 의 type 을 획득하여, 해당 리스트를 동적으로 페이지에 출력
+// next.js 에서는 params 라는 prop 으로 자동으로 전달되어 사용 가능
+// React 에서는 컴포넌트를 async 함수로 사용할 수 없음
+// 하지만 Next.js 에서는(서버 컴포넌트 한정) async 함수로 사용할 수 있음
+export default async function Page({ params }) {
+  // const { type } = params; // params 객체 내의 type 을 구조 분해 할당, next.js 14 까지는 props 를 바로 사용할 수 있었음
+  // Next.js 15 에서는 params 가 Promise 로 전달됨, 따라서 promise 가 fulfilled 되는 것을 기다려야 함.
+  const { type } = await params;
+
+  // react 에서는 const {type} = useParams(); 로 해당 게시판의 type 을 url 로부터 전달받음
+
   return (
     <main className="min-w-80 p-10">
       <div className="text-center py-4">
         <h2 className="pb-4 text-2xl font-bold text-gray-700 dark:text-gray-200">
-          정보 공유
+          {type} 게시판
         </h2>
       </div>
       <div className="flex justify-end mr-4">

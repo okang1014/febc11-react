@@ -2,12 +2,26 @@ import Link from "next/link";
 
 // 게시글 상세 조회
 async function fetchPost(_id) {
+  console.log(_id, "상세 조회");
   const url = `https://11.fesp.shop/posts/${_id}`;
 
   const res = await fetch(url, {
     headers: { "client-id": "00-board" },
   });
   return await res.json();
+}
+// 동일한 서버 요청을 두 번 진행하는 것처럼 보임
+// Next.js 에서는 서버로부터 받아온 데이터를 자동으로 캐싱, 함수 호출 결과를 캐싱하여 자동으로 캐시된 데이터를 반환한다.
+// 즉, 함수 자체는 두 번 호출이 되지만, 서버 요청 네트워크 통신은 한 번만 실행
+
+export async function generateMetadata({ params }) {
+  const { _id } = await params;
+  // params 를 받아와서 fetchAPI 로 관련 글 다시 조회, 게시글 정보를 metadata 로 지정
+  const data = await fetchPost(_id);
+  return {
+    title: data.item.title,
+    description: data.item.content,
+  };
 }
 
 export default async function Page({ params }) {

@@ -18,10 +18,35 @@ async function fetchPosts(type) {
 
 // 게시글 리스트에 해당하는 metadata
 // 별도로 absolute 를 지정하지 않았기 때문에 index 에서 지정된 템플릿에 title 추가
-export const metadata = {
-  title: "게시물 목록",
-  description: "게시물 목록 페이지입니다.",
-};
+// export const metadata = {
+//   title: "게시물 목록",
+//   description: "게시물 목록 페이지입니다.",
+// };
+
+// 동적으로 metadata 지정하는 함수
+// 컴포넌트 내부에서 획득한 params 를 사용할 수 없기 때문에 metadata 객체를 반환하는 함수
+export async function generateMetadata({ params }) {
+  const { type } = await params;
+  let listType = "";
+  switch (type) {
+    case "info":
+      listType = "정보 게시판";
+      break;
+    case "free":
+      listType = "자유 게시판";
+      break;
+    case "qna":
+      listType = "Q&A 게시판";
+      break;
+    default:
+      listType = "게시물 목록 페이지입니다.";
+      break;
+  }
+  return {
+    title: `${listType} 목록`,
+    description: "게시물 목록 페이지입니다.",
+  };
+}
 
 // react-router-dom 에서는 useParams 로 해당 url 중 list 의 type 을 획득하여, 해당 리스트를 동적으로 페이지에 출력
 // next.js 에서는 params 라는 prop 으로 자동으로 전달되어 사용 가능

@@ -2,6 +2,26 @@ import Link from "next/link";
 import "./globals.css";
 // cdn 방식으로 import 하는 방식 대신, 해당 css 파일을 import 해서 사용
 
+// 컴포넌트 내에 metadata 가 지정되지 않은 경우, 아래의 metadata 가 default 로 출력
+export const metadata = {
+  title: {
+    default: "멋쟁이 사자처럼 커뮤니티 - 멋사컴즈", // 기본 title 값
+    template: "%s | 멋사컴즈 ", // 각 페이지별로 지정된 title 에 자동으로 suffix 추가
+  },
+  description: "유용한 정보를 나누고 공유하세요.",
+  keywords: "커뮤니티, 소통, 포럼, 관심사, 온라인 모임, 커뮤니티 서비스",
+  authors: [{ name: "Front End Boot Camp" }],
+
+  openGraph: {
+    title: "멋사컴에 오신걸 환영합니다.",
+    description: "유용하나 정보를 나누고 공유하세요.",
+    images: ["/images/febc.png"],
+    url: "https://board.fesp.shop",
+    type: "website",
+    siteName: "멋사컴즈",
+  },
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
@@ -9,27 +29,8 @@ export default function RootLayout({ children }) {
         <meta charSet="UTF-8" />
         <link rel="icon" type="image/x-icon" href="/images/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>멋쟁이 사자처럼 커뮤니티 - 멋사컴</title>
+        {/* 기존 metadata 는 위의 metadata 로 추가 */}
 
-        <meta
-          name="description"
-          content="다양한 주제의 커뮤니티와 활발한 소통을 위한 플랫폼입니다. 관심사에 따라 참여하고, 의견을 나누세요."
-        />
-        <meta
-          name="keywords"
-          content="커뮤니티, 소통, 포럼, 관심사, 온라인 모임, 커뮤니티 서비스"
-        />
-        <meta name="author" content="Front End Boot Camp" />
-
-        <meta property="og:title" content="멋사컴에 오신걸 환영합니다." />
-        <meta
-          property="og:description"
-          content="유용한 정보를 나누고 공유하세요."
-        />
-        <meta property="og:image" content="/images/febc.png" />
-        <meta property="og:url" content="https://board.fesp.shop" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="멋사컴" />
         {/* 직접 script 태그 삽입 및 cdn 방식으로 tailwindcss 를 사용하는 방법 권장 X */}
         {/* <script src="https://cdn.tailwindcss.com"></script> */}
       </head>

@@ -1,5 +1,13 @@
 import Link from "next/link";
 
+// absolute 속성으로 지정하면 index page 에서 지정한 metadata 를 무시하고 absolute 로 지정된 내용 출력
+// 메인 페이지에 해당하는 metadata
+export const metadata = {
+  title: {
+    absolute: "멋쟁이 사자처럼 커뮤니티",
+  },
+};
+
 export default function Home() {
   return (
     <main className="container mx-auto mt-10 p-4 transition-color">

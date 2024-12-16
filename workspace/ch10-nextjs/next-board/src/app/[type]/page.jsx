@@ -16,6 +16,13 @@ async function fetchPosts(type) {
   return await res.json(); // 서버 응답으로 전달받은 데이터를 parsing
 }
 
+// 게시글 리스트에 해당하는 metadata
+// 별도로 absolute 를 지정하지 않았기 때문에 index 에서 지정된 템플릿에 title 추가
+export const metadata = {
+  title: "게시물 목록",
+  description: "게시물 목록 페이지입니다.",
+};
+
 // react-router-dom 에서는 useParams 로 해당 url 중 list 의 type 을 획득하여, 해당 리스트를 동적으로 페이지에 출력
 // next.js 에서는 params 라는 prop 으로 자동으로 전달되어 사용 가능
 // React 에서는 컴포넌트를 async 함수로 사용할 수 없음

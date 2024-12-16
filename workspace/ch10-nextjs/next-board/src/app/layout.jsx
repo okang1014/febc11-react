@@ -1,4 +1,6 @@
 import Link from "next/link";
+import "./globals.css";
+// cdn 방식으로 import 하는 방식 대신, 해당 css 파일을 import 해서 사용
 
 export default function RootLayout({ children }) {
   return (
@@ -28,8 +30,8 @@ export default function RootLayout({ children }) {
         <meta property="og:url" content="https://board.fesp.shop" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="멋사컴" />
-
-        <script src="https://cdn.tailwindcss.com"></script>
+        {/* 직접 script 태그 삽입 및 cdn 방식으로 tailwindcss 를 사용하는 방법 권장 X */}
+        {/* <script src="https://cdn.tailwindcss.com"></script> */}
       </head>
       <body>
         <div id="root">
